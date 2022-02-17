@@ -1,9 +1,5 @@
 make --dry-run --keep-going --print-directory
-make: Entering directory '/home/student/Documents/group_11_all/Lab 1 - Heis/skeleton_project'
-mkdir -p build/driver
-clang -o build/driver/elevio.o -c -Wall -g -std=gnu11 -fsanitize=address source/driver/elevio.c
-mkdir -p build
-clang -o build/main.o -c -Wall -g -std=gnu11 -fsanitize=address source/main.c
-clang build/driver/elevio.o build/main.o -o elevator -fsanitize=address
-make: Leaving directory '/home/student/Documents/group_11_all/Lab 1 - Heis/skeleton_project'
+make: Entering directory '/home/student/Documents/group_11_all/Heislab---TilDat'
+make: Nothing to be done for 'all'.
+make: Leaving directory '/home/student/Documents/group_11_all/Heislab---TilDat'
  
