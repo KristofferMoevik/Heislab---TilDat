@@ -1,0 +1,9 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/home/student/Documents/group_11_all/Øving 5 - Doxygen/example'
+mkdir -p build
+gcc -O0 -g3 -Wall -Werror -c source/main.c -o build/main.o
+gcc -O0 -g3 -Wall -Werror -c source/memory_library.c -o build/memory_library.o
+ 
+gcc -O0 -g3 -Wall -Werror build/main.o build/memory_library.o -o main
+make: Leaving directory '/home/student/Documents/group_11_all/Øving 5 - Doxygen/example'
+ 

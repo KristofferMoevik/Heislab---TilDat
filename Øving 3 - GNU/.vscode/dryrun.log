@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/student/Documents/group_11_all/Øving 3 - GNU'
+make: Leaving directory '/home/student/Documents/group_11_all/Øving 3 - GNU'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+ 
