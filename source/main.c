@@ -7,7 +7,7 @@
 #include "driver/elevio.h"
 #include "modules/LinkedList.h"
 
-
+// ingeborg er kul
 
 int main(){
     elevio_init();
