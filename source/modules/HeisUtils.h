@@ -14,6 +14,6 @@
 * size 12
 */
 int * ReadInputs(void);
-void AddOrders(int inputs[12]);
+int * AddOrders(int inputs[12], int * orders[12]);
 void SortOrders();
 void ExecuteOrders();

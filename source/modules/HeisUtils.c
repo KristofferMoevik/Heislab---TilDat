@@ -22,3 +22,15 @@ int * ReadInputs(){
 
     return r;
 }
+
+// [1 up, 1 cab, 2 up, 2 down, 2 cab, 3 up, 3 down, 3 cab, 4 down, 4 cab]
+int * AddOrders(int inputs[12], int * orders[12]){
+    int i;
+    for(i=0; i < 12; i++){
+        if(inputs[i] == 1){
+            orders[i] = 1;
+        }
+    }
+
+    return orders;
+}

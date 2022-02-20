@@ -58,8 +58,25 @@ int example(){
 }
 
 int main(){
+    
+    int * inputs;
+    int initial_orders = {0,0,0,0,0,0,0,0,0,0};
     // example();
     elevio_init();
-    int * inputs = ReadInputs();
     
+    
+    inputs = ReadInputs();
+    int orders = AddOrders(inputs, initial_orders);
+    
+     while(1){
+    
+        inputs = ReadInputs();
+        orders = AddOrders(inputs, orders);
+
+        int i;
+        for ( i = 0; i < 10; i++ ) {
+            printf( "%d", orders[i]);
+        }
+        printf("\n");
+    }
 }
