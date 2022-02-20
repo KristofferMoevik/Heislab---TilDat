@@ -5,11 +5,22 @@
 #include <stdbool.h>
 #include <time.h>
 #include "driver/elevio.h"
+#include "modules/HeisUtils.h"
 
 
 
-int main(){
-    int floor = elevio_floorSensor();
+
+int example(){
+    elevio_init();
+    
+    printf("=== Example Program ===\n");
+    printf("Press the stop button on the elevator panel to exit\n");
+
+    elevio_motorDirection(DIRN_UP);
+
+
+    while(1){
+        int floor = elevio_floorSensor();
         printf("floor: %d \n",floor);
 
         if(floor == 0){
@@ -43,4 +54,21 @@ int main(){
     }
 
     return 0;
+}
+
+int main(){
+    while(1){
+        int * r;
+        int i;
+
+        r = ReadInputs();
+
+        for ( i = 0; i < 10; i++ ) {
+            printf( "*(r + %d) : %d", i, *(r + i));
+        }
+        printf("\n");
+    }
+    
+    
+    
 }
