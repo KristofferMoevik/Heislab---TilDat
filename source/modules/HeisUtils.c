@@ -6,7 +6,6 @@ int * ReadInputs(){
 
     static int  r[12];
     
-
     r[0] = elevio_callButton(0, 0); elevio_buttonLamp(0, 0, r[0]);
     r[1] = elevio_callButton(0, 2); elevio_buttonLamp(0, 2, r[1]);
     r[2] = elevio_callButton(1, 0); elevio_buttonLamp(1, 1, r[2]);
@@ -19,7 +18,7 @@ int * ReadInputs(){
     r[9] = elevio_callButton(3, 2); elevio_buttonLamp(3, 2, r[9]);
     r[10] = elevio_obstruction();
     r[11] = elevio_stopButton();
-
+    
 
     return r;
 }

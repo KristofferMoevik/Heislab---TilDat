@@ -35,6 +35,7 @@ int example(){
         for(int f = 0; f < N_FLOORS; f++){
             for(int b = 0; b < N_BUTTONS; b++){
                 int btnPressed = elevio_callButton(f, b);
+                printf("%d",btnPressed);
                 elevio_buttonLamp(f, b, btnPressed);
             }
         }
@@ -57,18 +58,8 @@ int example(){
 }
 
 int main(){
-    while(1){
-        int * r;
-        int i;
-
-        r = ReadInputs();
-
-        for ( i = 0; i < 10; i++ ) {
-            printf( "*(r + %d) : %d", i, *(r + i));
-        }
-        printf("\n");
-    }
-    
-    
+    // example();
+    elevio_init();
+    int * inputs = ReadInputs();
     
 }
