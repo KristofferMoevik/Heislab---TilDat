@@ -48,7 +48,7 @@ int * AddOrders(int * inputs, int * orders){
 // completed_order: is 0 if order not completed. Equals story completed if completed
 
 //returns 0 if no order or number of story to go to. Based on who pushed the button first
-int get_cab_order(int floor, int * orders){
+int get_cab_order(int floor, int * orders, int * direction){
     int cab_order_array[] = {*(orders+1), *(orders+4), *(orders+7), *(orders+9)};
     int time;
     int earliest;
@@ -60,19 +60,38 @@ int get_cab_order(int floor, int * orders){
             earliest_value = i;
         }
     }
+
+    if(earliest_value > floor){
+        *direction = 1;
+    } else if(earliest_value < floor){
+        *direction = -1;
+    }
+
     return earliest_value;
 }
 
-int get_floor_order(floor, orders){
 
+int get_floor_order(int floor, int * orders, int * direction){
+    int floor_order_array[] = {*(orders+1), *(orders+4), *(orders+7), *(orders+9)};
+    int time;
+    int earliest;
+    int earliest_value;
+    for(int i = 0; i <= sizeof(floor_order_array); i++){
+        time = cab_order_array[i];
+        if(time < earliest){
+            earliest = time;
+            earliest_value = i;
+        }
+    }
+    return earliest_value;
 }
 
 int SortOrders(int * orders, int * completed_order, int * ordered_floor, int * stop_on_the_way){
+    int * direction; // up is 1, down is -1
     int floor = elevio_floorSensor();
     int cab_order = get_cab_order(floor, orders); //returns 0 if no order or number of story to go to
     int floor_order = get_floor_order(floor, orders); // returns 0 if no order or number of floor to go to
     int floor_between = get_floor_between(floor, cab_order); //returns 0 if none return number of floor between if not
-
     // Find main order
     if(completed_order != 0){
         if(cab_order != 0){
