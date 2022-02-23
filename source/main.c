@@ -8,8 +8,6 @@
 #include "modules/HeisUtils.h"
 
 
-
-
 int example(){
     elevio_init();
     
@@ -60,13 +58,13 @@ int example(){
 int main(){
     
     int * inputs;
-    int initial_orders = {0,0,0,0,0,0,0,0,0,0};
+    int initial_orders[] = {0,0,0,0,0,0,0,0,0,0};
     // example();
     elevio_init();
     
     
     inputs = ReadInputs();
-    int orders = AddOrders(inputs, initial_orders);
+    int * orders = AddOrders(inputs, initial_orders);
     
      while(1){
     
@@ -75,7 +73,8 @@ int main(){
 
         int i;
         for ( i = 0; i < 10; i++ ) {
-            printf( "%d", orders[i]);
+            int order_element = *(orders + i);
+            printf( "%d", order_element);
         }
         printf("\n");
     }
