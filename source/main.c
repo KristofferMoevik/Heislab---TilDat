@@ -57,18 +57,21 @@ int example(){
 
 int main(){
     
+    time_t start_t;
+    time(&start_t);
+    
     int * inputs;
     int initial_orders[] = {0,0,0,0,0,0,0,0,0,0};
     // example();
     elevio_init();
     
     
-    inputs = ReadInputs();
+    inputs = ReadInputs(start_t);
     int * orders = AddOrders(inputs, initial_orders);
     
      while(1){
     
-        inputs = ReadInputs();
+        inputs = ReadInputs(start_t);
         orders = AddOrders(inputs, orders);
 
         int i;
