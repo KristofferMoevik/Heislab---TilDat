@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <time.h>
-#include "driver/elevio.h"
+#include "../driver/elevio.h"
 /**
 * @file
 * @brief A library for running the elevator at the "Heislab"
@@ -26,7 +26,7 @@ typedef enum {
 * [1 Stop up, 1 Go to, 2 Stop up, 2 Stop down, 2 Go to, ..., 4 Stop down, 4 Go to, Stop, Obstruksjon]
 * size 12
 */
-int * ReadInputs(time_t start_t);
+double * ReadInputs(time_t start_t);
 
 
 /**
@@ -45,5 +45,5 @@ int * AddOrders(int * inputs, int * orders);
 *
 * @return Returns what story to go to a number in the range {1,2,3,4}
 */
-int SortOrders(int * orders, int * completed_order, int * ordered_floor, int * stop_on_the_way);
+void SortOrders(int * orders, int * completed_order, int * ordered_floor, int * stop_on_the_way);
 void ExecuteOrders();

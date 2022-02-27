@@ -57,14 +57,16 @@ int example(){
 
 int main(){
     
-    time_t start_t;
-    time(&start_t);
-    
-    int * inputs;
-    int initial_orders[] = {0,0,0,0,0,0,0,0,0,0};
-    // example();
+    time_t start_t = clock();
+    double * inputs;
+    double initial_orders[] = {0,0,0,0,0,0,0,0,0,0};
+    int motor_direction = 0; // up is 1, down is -1, 0 is still
+    int completed_order = 1;
+    int ordered_floor = elevio_floorSensor();
+    int stop_on_the_way = 0;
+
+
     elevio_init();
-    
     
     inputs = ReadInputs(start_t);
     int * orders = AddOrders(inputs, initial_orders);
@@ -73,11 +75,12 @@ int main(){
     
         inputs = ReadInputs(start_t);
         orders = AddOrders(inputs, orders);
-
+        SortOrders(orders, completed_order, ordered_floor, stop_on_the_way);
+        // printf("ordered floor : %d", ordered_floor);
         int i;
-        for ( i = 0; i < 10; i++ ) {
-            int order_element = *(orders + i);
-            printf( "%d", order_element);
+        for ( i = 0; i < 3; i++ ) {
+            double order_element = *(orders + i);
+            printf( "%f ", order_element);
         }
         printf("\n");
     }
