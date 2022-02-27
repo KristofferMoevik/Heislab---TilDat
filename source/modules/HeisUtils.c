@@ -111,9 +111,8 @@ int * get_compact_binary_orders(int * orders){
 
 int get_stop_on_the_way(int * floor, int * ordered_floor, int *orders){
     int stop_on_the_way = 0;
-    int * compact_binary_orders = get_compact_binary_orders;
-
-    if(*ordered_floor > floor){
+    int * compact_binary_orders = get_compact_binary_orders(orders);
+    if(*ordered_floor < *floor){
         for(int i = *ordered_floor + 1; i < floor; ++i){
             if(compact_binary_orders[i] == 1){
                 stop_on_the_way = i;
