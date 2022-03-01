@@ -26,7 +26,7 @@ typedef enum {
 * [1 Stop up, 1 Go to, 2 Stop up, 2 Stop down, 2 Go to, ..., 4 Stop down, 4 Go to, Stop, Obstruksjon]
 * size 12
 */
-double * ReadInputs(time_t start_t);
+int * ReadInputs(time_t start_t);
 
 
 /**
@@ -46,4 +46,11 @@ int * AddOrders(int * inputs, int * orders);
 * @return Returns what story to go to a number in the range {1,2,3,4}
 */
 void SortOrders(int * orders, int * completed_order, int * ordered_floor, int * stop_on_the_way);
+
+
 void ExecuteOrders();
+
+
+//testing
+int * get_compact_binary_orders(int * orders);
+int get_stop_on_the_way(int floor, int * ordered_floor, int *orders);
