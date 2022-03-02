@@ -28,12 +28,13 @@ int * ReadInputs(time_t start_t){
 
 int * AddOrders(int * inputs, int * orders){
     int i;
+    printf("%d", *orders);
     for(i=0; i < 12; i++){
-        if(*(inputs + i) != 0 && *(orders + i) == 0){
+        if((*(inputs + i) != 0) && (*(orders + i) == 0)){
             *(orders + i) = *(inputs + i);
         }
     }
-    return orders;
+    return 1;
 }
 
 // priority
@@ -112,31 +113,31 @@ int get_stop_on_the_way(int floor, int * ordered_floor, int *orders){
     int stop_on_the_way = 0;
     int * compact_binary_orders;
     compact_binary_orders = get_compact_binary_orders(orders);
-    // printf("%d", ordered_floor);
-    // if(*ordered_floor < floor){
-    //     printf("1");
-    //     for(int i = *ordered_floor + 1; i < floor; ++i){
-    //         if(compact_binary_orders[i] == 1){
-    //             stop_on_the_way = i;
-    //             break;
-    //         }
-    //     }
-    // }
-    // else if(*ordered_floor > floor){
-    //     printf("2");
-    //     for(int i = floor + 1; i < *ordered_floor; ++i){
-    //         printf("compact_orders = [%d]", *(compact_binary_orders + i));
-    //         if(*(compact_binary_orders + 1) == 1){
-    //             stop_on_the_way = i;
-    //             break;
-    //         }
-    //     }
-    // }
-    // else{
-    //     stop_on_the_way = 0;
-    // }
+    // // printf("%d", ordered_floor);
+    // // if(*ordered_floor < floor){
+    // //     printf("1");
+    // //     for(int i = *ordered_floor + 1; i < floor; ++i){
+    // //         if(compact_binary_orders[i] == 1){
+    // //             stop_on_the_way = i;
+    // //             break;
+    // //         }
+    // //     }
+    // // }
+    // // else if(*ordered_floor > floor){
+    // //     printf("2");
+    // //     for(int i = floor + 1; i < *ordered_floor; ++i){
+    // //         printf("compact_orders = [%d]", *(compact_binary_orders + i));
+    // //         if(*(compact_binary_orders + 1) == 1){
+    // //             stop_on_the_way = i;
+    // //             break;
+    // //         }
+    // //     }
+    // // }
+    // // else{
+    // //     stop_on_the_way = 0;
+    // // }
 
-    // printf("floor %d, ordered floor %d, stop on the way %d", floor, 1, 1);
+    // // printf("floor %d, ordered floor %d, stop on the way %d", floor, 1, 1);
     return stop_on_the_way;
 }
 
@@ -148,6 +149,10 @@ void SortOrders(int * orders, int * completed_order, int * ordered_floor, int * 
     *stop_on_the_way = get_stop_on_the_way(floor, ordered_floor, orders); //returns 0 if none return number of floor between if not
     printf("floor = %d, cab orders = %d, floor_orders = %d, floor between = %d \n", floor, cab_order, floor_order, *stop_on_the_way);
     // // Find main order
+    //printf("%d", *completed_order);
+    // printf("%d", *ordered_floor);
+    // int var = *stop_on_the_way;
+    // printf("%d", var);
     if(*completed_order != 0){
         // if(cab_order != 0){
         //     *ordered_floor = cab_order;
@@ -164,6 +169,7 @@ void SortOrders(int * orders, int * completed_order, int * ordered_floor, int * 
         //     *ordered_floor = stop_on_the_way;
         // }
         // *completed_order = (int) 0;
+        // *completed_order = 1;
         printf("ghghgh");
     }
 

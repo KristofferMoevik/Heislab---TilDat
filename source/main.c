@@ -3,138 +3,107 @@
 #include <signal.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <time.h>
 #include "driver/elevio.h"
 #include "modules/HeisUtils.h"
 
+enum Current_pos {
+    STORY_1 = 1, 
+    BETWEEN_1_2 = 15,
+    STORY_2 = 2,
+    BETWEEN_2_3 = 25,
+    STORY_3 = 3,
+    BEETWEEN_3_4 = 35,
+    STORY_4 = 4,
+}; 
 
-int example(){
-    elevio_init();
-    
-    printf("=== Example Program ===\n");
-    printf("Press the stop button on the elevator panel to exit\n");
-
-    elevio_motorDirection(DIRN_UP);
-
-
-    while(1){
-        int floor = elevio_floorSensor();
-        printf("floor: %d \n",floor);
-
-        if(floor == 0){
-            elevio_motorDirection(DIRN_UP);
-        }
-
-        if(floor == N_FLOORS-1){
-            elevio_motorDirection(DIRN_DOWN);
-        }
-
-
-        for(int f = 0; f < N_FLOORS; f++){
-            for(int b = 0; b < N_BUTTONS; b++){
-                int btnPressed = elevio_callButton(f, b);
-                printf("%d",btnPressed);
-                elevio_buttonLamp(f, b, btnPressed);
-            }
-        }
-
-        if(elevio_obstruction()){
-            elevio_stopLamp(1);
-        } else {
-            elevio_stopLamp(0);
-        }
-        
-        if(elevio_stopButton()){
-            elevio_motorDirection(DIRN_STOP);
-            break;
-        }
-        
-        nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
-    }
-
-    return 0;
-}
-
-int * test_get_compact_binary_orders(int * orders){
-    int compact_binary_orders[4];
-    for(int i  = 0; i < 4; i++){
-        compact_binary_orders[i] = 0;
-    }
-    if(orders[0] != 0 || orders[1] != 0){
-        compact_binary_orders[0] = 1;
-    }
-    if(orders[2] != 0 || orders[3] != 0 || orders[4] != 0){
-        compact_binary_orders[1] = 1;
-    }
-    if(orders[5] != 0 || orders[6] != 0 || orders[7] != 0){
-        compact_binary_orders[2] = 1;
-    }
-    if(orders[8] != 0 || orders[9] != 0){
-        compact_binary_orders[3] = 1;
-    }
-
-    return &compact_binary_orders;
-}
-
-int test_get_stop_on_the_way(int * floor, int * ordered_floor, int *orders){
-    int stop_on_the_way = 0;
-    int * compact_binary_orders;
-    compact_binary_orders = get_compact_binary_orders(orders);
-    if(*ordered_floor < *floor){
-        printf("1");
-        for(int i = *ordered_floor + 1; i < *floor; ++i){
-            if(compact_binary_orders[i] == 1){
-                stop_on_the_way = i;
-                break;
-            }
-        }
-    }
-    else if(*ordered_floor > *floor){
-        printf("2");
-        for(int i = *floor + 1; i < *ordered_floor; ++i){
-            printf("compact_orders = [%d]", *(compact_binary_orders + i));
-            if(*(compact_binary_orders + 1) == 1){
-                stop_on_the_way = i;
-                break;
-            }
-        }
-    }
-    else{
-        stop_on_the_way = 0;
-    }
-
-    printf("floor %d, ordered floor %d, stop on the way %d", *floor, *ordered_floor, stop_on_the_way);
-    return stop_on_the_way;
-}
+enum States {
+    INIT_STATE = 0,
+    IDLE = 1,
+    GO_UP = 2,
+    GO_DOWN = 3,
+    OPEN_DOOR = 4,
+    CLOSE_DOOR = 5,
+    WAIT = 6,
+    STOP = 7,
+    WAIT_STOP = 8,
+    OPEN_DOORS_STOP = 9,
+};
 
 int main(){
-    
-    time_t start_t = clock();
-    int * inputs;
-    int initial_orders[] = {0,0,0,0,0,0,0,0,0,0};
-    int motor_direction = 0; // up is 1, down is -1, 0 is still
-    int completed_order = 1;
-    int ordered_floor = elevio_floorSensor();
-    int stop_on_the_way = 0;
+    int STATE = INIT_STATE;
+    int inputs[] = {0,0,0,0,0,0,0,0,0,0,0,0};
+    int current_pos = -1;
+    int last_pos = -1;
+    int motor_direction = 0;
 
-    elevio_init();
-    
-    inputs = ReadInputs(start_t);
-    int * orders = AddOrders(inputs, initial_orders);
-    
+
     while(1){
-    
-        inputs = ReadInputs(start_t);
-        orders = AddOrders(inputs, orders);
-        SortOrders(orders, &completed_order, &ordered_floor, &stop_on_the_way);
-        // printf("floor %d, ordered floor %d, stop on the way %d", floor, ordered_floor, stop_on_the_way);
-        // printf("ordered floor : %d", ordered_floor);
-        int i;
-        for ( i = 0; i < 8; i++ ) {
-            int order_element = *(orders + i);
-            printf( "%d ", order_element);
+        
+        // read inputs
+        int diff_t = clock();
+        if(elevio_callButton(0, 0) == 1){ inputs[0] = diff_t; elevio_buttonLamp(0, 0, 1);} else{inputs[0] = 0;}
+        if(elevio_callButton(0, 2) == 1){ inputs[1] = diff_t; elevio_buttonLamp(0, 2, 1);} else{inputs[1] = 0;}
+        if(elevio_callButton(1, 0) == 1){ inputs[2] = diff_t; elevio_buttonLamp(1, 0, 1);} else{inputs[2] = 0;}
+        if(elevio_callButton(1, 1) == 1){ inputs[3] = diff_t; elevio_buttonLamp(1, 0, 1);} else{inputs[3] = 0;}
+        if(elevio_callButton(1, 2) == 1){ inputs[4] = diff_t; elevio_buttonLamp(1, 0, 1);} else{inputs[4] = 0;}
+        if(elevio_callButton(2, 0) == 1){ inputs[5] = diff_t; elevio_buttonLamp(2, 0, 1);} else{inputs[5] = 0;}
+        if(elevio_callButton(2, 1) == 1){ inputs[6] = diff_t; elevio_buttonLamp(2, 0, 1);} else{inputs[6] = 0;}
+        if(elevio_callButton(2, 2) == 1){ inputs[7] = diff_t; elevio_buttonLamp(2, 0, 1);} else{inputs[7] = 0;}
+        if(elevio_callButton(3, 1) == 1){ inputs[8] = diff_t; elevio_buttonLamp(3, 0, 1);} else{inputs[8] = 0;}
+        if(elevio_callButton(3, 2) == 1){ inputs[9] = diff_t; elevio_buttonLamp(3, 0, 1);} else{inputs[9] = 0;}
+        if(elevio_obstinputsuction() == 1){ inputs[10] = diff_t;}
+        if(elevio_stopButton() == 1){ inputs[11] = diff_t;}
+
+        // get current position, and save last known position
+        if(current_pos != -1){
+            last_pos = current_pos;
         }
-        printf("\n");
+        int floor_sensor = elevio_floorSensor();
+        if(floor_sensor != -1)){
+            current_pos = floor_sensor;
+        } else if(floor_sensor == -1){
+            
+        }
+
+        switch (STATE)
+        {
+        case  INIT_STATE:
+            /* code */
+            break;
+        case /* constant-expression */:
+            /* code */
+            break;
+        case /* constant-expression */:
+            /* code */
+            break;
+        case /* constant-expression */:
+            /* code */
+            break;
+        case /* constant-expression */:
+            /* code */
+            break;
+        case /* constant-expression */:
+            /* code */
+            break;
+        case /* constant-expression */:
+            /* code */
+            break;
+        case /* constant-expression */:
+            /* code */
+            break;
+        case /* constant-expression */:
+            /* code */
+            break;
+        case /* constant-expression */:
+            /* code */
+            break;
+        
+        default:
+            break;
+        }
     }
+    
 }
 
