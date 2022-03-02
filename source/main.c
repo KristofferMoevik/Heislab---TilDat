@@ -43,7 +43,7 @@ int main(){
     int64_t STATE = INIT_STATE;
     int64_t inputs[] = {0,0,0,0,0,0,0,0,0,0,0,0};
     int64_t orders[] = {0,0,0,0,0,0,0,0,0,0,0,0};
-    int64_t ordered_store = -1;
+    int64_t ordered_store = 0;
     int64_t current_pos = UNDEFINED;
     int64_t last_pos = UNDEFINED;
     int64_t motor_direction = STILL;
