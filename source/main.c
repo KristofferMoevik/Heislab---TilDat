@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include <time.h>
 #include "driver/elevio.h"
-#include "modules/HeisUtils.h"
+#include <inttypes.h>
 
 enum Current_pos {
     UNDEFINED = -10,
@@ -38,9 +38,12 @@ enum Motor_direction {
     UP = 1,
 };
 
-int64_t main(){
+int main(){
+    elevio_init();
     int64_t STATE = INIT_STATE;
     int64_t inputs[] = {0,0,0,0,0,0,0,0,0,0,0,0};
+    int64_t orders[] = {0,0,0,0,0,0,0,0,0,0,0,0};
+    int64_t ordered_store = -1;
     int64_t current_pos = UNDEFINED;
     int64_t last_pos = UNDEFINED;
     int64_t motor_direction = STILL;
@@ -50,7 +53,8 @@ int64_t main(){
     while(1){
         
         // read inputs
-        int64_t diff_t = clock();
+        int64_t diff_t = (int64_t)clock();
+        printf("time = %" PRId64, diff_t); 
         if(elevio_callButton(0, 0) == 1){ inputs[0] = diff_t; elevio_buttonLamp(0, 0, 1);} else{inputs[0] = 0;}
         if(elevio_callButton(0, 2) == 1){ inputs[1] = diff_t; elevio_buttonLamp(0, 2, 1);} else{inputs[1] = 0;}
         if(elevio_callButton(1, 0) == 1){ inputs[2] = diff_t; elevio_buttonLamp(1, 0, 1);} else{inputs[2] = 0;}
@@ -61,9 +65,50 @@ int64_t main(){
         if(elevio_callButton(2, 2) == 1){ inputs[7] = diff_t; elevio_buttonLamp(2, 0, 1);} else{inputs[7] = 0;}
         if(elevio_callButton(3, 1) == 1){ inputs[8] = diff_t; elevio_buttonLamp(3, 0, 1);} else{inputs[8] = 0;}
         if(elevio_callButton(3, 2) == 1){ inputs[9] = diff_t; elevio_buttonLamp(3, 0, 1);} else{inputs[9] = 0;}
-        if(elevio_obstinputsuction() == 1){ inputs[10] = diff_t;}
+        if(elevio_obstruction() == 1){ inputs[10] = diff_t;}
         if(elevio_stopButton() == 1){ inputs[11] = diff_t;}
+        // printf("inputs = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", inputs[0], inputs[1], inputs[2], inputs[3], inputs[4], inputs[5], inputs[6], inputs[7], inputs[8], inputs[9], inputs[10], inputs[11]);
+        
+        // add orders, the lowest number is the next order
+        if(inputs[0] > orders[0]){orders[0] = inputs[0];}
+        if(inputs[1] > orders[1]){orders[1] = inputs[1];}
+        if(inputs[2] > orders[2]){orders[2] = inputs[2];}
+        if(inputs[3] > orders[3]){orders[3] = inputs[3];}
+        if(inputs[4] > orders[4]){orders[4] = inputs[4];}
+        if(inputs[5] > orders[5]){orders[5] = inputs[5];}
+        if(inputs[6] > orders[6]){orders[6] = inputs[6];}
+        if(inputs[7] > orders[7]){orders[7] = inputs[7];}
+        if(inputs[8] > orders[8]){orders[8] = inputs[8];}
+        if(inputs[9] > orders[9]){orders[9] = inputs[9];}
+        printf("orders = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "]", orders[0], orders[1], orders[2], orders[3], orders[4], orders[5], orders[6], orders[7], orders[8], orders[9], orders[10], orders[11]);
 
+        // set witch story to go to based on first order
+        int64_t time;
+        int64_t earliest = 9223372036854775807;
+        int64_t earliest_value = -1;
+        for(int i = 0; i < 9; i++){
+            time = orders[i];
+            if(time < earliest && time != 0){
+                earliest = time;
+                earliest_value = i;
+            }
+        }
+        if(earliest_value > -1){
+            if(earliest_value == 0 || earliest_value == 1){
+                ordered_store = 1;
+            }
+            else if(earliest_value == 2 || earliest_value == 3 || earliest_value == 4){
+                ordered_store = 2;
+            }
+            else if(earliest_value == 5 || earliest_value == 6 || earliest_value == 7){
+                ordered_store = 3;
+            }
+            else if(earliest_value == 8 || earliest_value == 9){
+                ordered_store = 4;
+            }            
+            
+        }
+        printf("  earliest value = %" PRId64 " ordered_store = %" PRId64"\n", earliest, ordered_store);
         // get current position, and save last known position
         if(current_pos != UNDEFINED){
             last_pos = current_pos;
@@ -101,37 +146,38 @@ int64_t main(){
             STATE = INIT_STATE;
         }
 
+        
         switch (STATE)
         {
         case  INIT_STATE:
-            /* code */
+            printf("Entered INIT_STATE");
             break;
         case IDLE:
-            /* code */
+            printf("Entered IDLE");
             break;
         case GO_UP:
-            /* code */
+            printf("Entered INIT_STATE");
             break;
         case GO_DOWN:
-            /* code */
+            printf("Entered INIT_STATE");
             break;
         case OPEN_DOOR:
-            /* code */
+            printf("Entered INIT_STATE");
             break;
         case CLOSE_DOOR:
-            /* code */
+            printf("Entered INIT_STATE");
             break;
         case WAIT:
-            /* code */
+            printf("Entered INIT_STATE");
             break;
         case STOP:
-            /* code */
+            printf("Entered INIT_STATE");
             break;
         case WAIT_STOP:
-            /* code */
+            printf("Entered INIT_STATE");
             break;
         case OPEN_DOORS_STOP:
-            /* code */
+            printf("Entered INIT_STATE");
             break;
         
         default:
