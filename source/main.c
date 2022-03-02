@@ -168,17 +168,45 @@ int main(){
 
         case IDLE:
 
+            if(ordered_store == 0){
+                STATE = IDLE;
+            }
+            if(ordered_store != 0){
+                if(ordered_store == current_pos){STATE = OPEN_DOOR;};
+                if(ordered_store < current_pos){STATE = GO_DOWN;};
+                if(ordered_store > current_pos){STATE = GO_UP;};
+            }
+
             break;
 
         case GO_UP:
+
+
+            elevio_motorDirection(DIRN_UP);
+            elevio_floorIndicator(elevio_floorSensor());
+            if(ordered_store == current_pos){
+                elevio_motorDirection(DIRN_STOP);
+                STATE = OPEN_DOOR;
+                }
 
             break;
 
         case GO_DOWN:
 
+
+            elevio_motorDirection(DIRN_DOWN);
+            elevio_floorIndicator(elevio_floorSensor());
+            if(ordered_store == current_pos){
+                elevio_motorDirection(DIRN_STOP);
+                STATE = OPEN_DOOR;
+                }
+
             break;
 
         case OPEN_DOOR:
+            elevio_doorOpenLamp(1);
+            STATE = WAIT;
+
 
             break;
 
