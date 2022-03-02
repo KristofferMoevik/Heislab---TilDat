@@ -86,7 +86,7 @@ int64_t main(){
                     STATE = INIT_STATE;
                 }
                 else if(last_motor_direction == UP){
-                    current_pos = last
+                    current_pos = last 
                 }
             }
 
@@ -95,26 +95,62 @@ int64_t main(){
         switch (STATE)
         {
         case  INIT_STATE:
-            /* code */
+            elevio_motorDirection(DIRN_DOWN); 
+            if (elevio_floorSensor() == 1||2||3||4){
+                elevio_motorDirection(DIRN_STOP);
+                elevio_floorIndicator(elevio_floorSensor());
+                current_pos = elevio_floorSensor();
+                STATE = IDLE;
+                }
             break;
+
         case IDLE:
-            /* code */
+            int64_t order_pos = input_pos; //Blir definert i main, så kan fjernes
+            // Take order from array
+            // Hent ut første element i array
+            if(order_pos == current_pos){STATE = OPEN_DOOR;};
+            if(order_pos < current_pos){STATE = GO_DOWN;};
+            if(order_pos > current_pos){STATE = GO_UP;};
             break;
+
         case GO_UP:
-            /* code */
+            elevio_motorDirection(DIRN_UP);
+            elevio_floorIndicator(elevio_floorSensor());
+            if(order_pos == current_pos){
+                elevio_motorDirection(DIRN_STOP);
+                STATE = OPEN_DOOR;
+                }
             break;
+
         case GO_DOWN:
-            /* code */
+            elevio_motorDirection(DIRN_DOWN);
+            elevio_floorIndicator(elevio_floorSensor());
+            if(order_pos == current_pos){
+                elevio_motorDirection(DIRN_STOP);
+                STATE = OPEN_DOOR;
+                }
             break;
+
         case OPEN_DOOR:
-            /* code */
+            elevio_doorOpenLamp(1);
+            STATE = WAIT;
             break;
-        case CLOSE_DOOR:
-            /* code */
-            break;
+
         case WAIT:
+            if(elevio_obstruction()){
+                STATE = WAIT;
+            }
+            if(!elevio_obstruction()){
+                //3 sekund timer
+                STATE = CLOSE_DOOR;
+            }
+            break;
+
+        case CLOSE_DOOR:
+            elevio_doorOpenLamp(0);
             /* code */
             break;
+
         case STOP:
             /* code */
             break;
