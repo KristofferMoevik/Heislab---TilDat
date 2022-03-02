@@ -111,7 +111,7 @@ int main(){
             }   
             
         }
-        printf("  earliest value = %" PRId64 " ordered_store = %" PRId64"\n", earliest, ordered_store);
+        // printf("  earliest value = %" PRId64 " ordered_store = %" PRId64"\n", earliest, ordered_store);
         // get current position, and save last known position
         if(current_pos != UNDEFINED){
             last_pos = current_pos;
@@ -157,7 +157,7 @@ int main(){
         case  INIT_STATE:
 
             elevio_motorDirection(DIRN_DOWN); 
-            if (elevio_floorSensor() == 1||2||3||4){
+            if (elevio_floorSensor() == 1 || elevio_floorSensor() == 2 || elevio_floorSensor() == 3 || elevio_floorSensor() == 4){
                 elevio_motorDirection(DIRN_STOP);
                 elevio_floorIndicator(elevio_floorSensor());
                 current_pos = elevio_floorSensor();
@@ -167,6 +167,7 @@ int main(){
             break;
 
         case IDLE:
+
             if(ordered_store == 0){
                 STATE = IDLE;
             }
@@ -175,9 +176,11 @@ int main(){
                 if(ordered_store < current_pos){STATE = GO_DOWN;};
                 if(ordered_store > current_pos){STATE = GO_UP;};
             }
+
             break;
 
         case GO_UP:
+
 
             elevio_motorDirection(DIRN_UP);
             elevio_floorIndicator(elevio_floorSensor());
@@ -189,6 +192,7 @@ int main(){
             break;
 
         case GO_DOWN:
+
 
             elevio_motorDirection(DIRN_DOWN);
             elevio_floorIndicator(elevio_floorSensor());
@@ -203,33 +207,25 @@ int main(){
             elevio_doorOpenLamp(1);
             STATE = WAIT;
 
+
             break;
 
         case WAIT:
 
-            if(elevio_obstruction()){
-                STATE = WAIT;
-            }
-            if(!elevio_obstruction()){
-                //3 sekund timer
-                STATE = CLOSE_DOOR;
-            }
             break;
 
         case CLOSE_DOOR:
-            elevio_doorOpenLamp(0);
-            /* code */
-
+  
             break;
 
         case STOP:
-            printf("Entered INIT_STATE");
+            
             break;
         case WAIT_STOP:
-            printf("Entered INIT_STATE");
+            
             break;
         case OPEN_DOORS_STOP:
-            printf("Entered INIT_STATE");
+            
             break;
         
         default:
