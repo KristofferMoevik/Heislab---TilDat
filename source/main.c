@@ -167,21 +167,21 @@ int main(){
             break;
 
         case IDLE:
-
-            int64_t order_pos = input_pos; //Blir definert i main, så kan fjernes
-            // Take order from array
-            // Hent ut første element i array
-            if(order_pos == current_pos){STATE = OPEN_DOOR;};
-            if(order_pos < current_pos){STATE = GO_DOWN;};
-            if(order_pos > current_pos){STATE = GO_UP;};
-
+            if(ordered_store == 0){
+                STATE = IDLE;
+            }
+            if(ordered_store != 0){
+                if(ordered_store == current_pos){STATE = OPEN_DOOR;};
+                if(ordered_store < current_pos){STATE = GO_DOWN;};
+                if(ordered_store > current_pos){STATE = GO_UP;};
+            }
             break;
 
         case GO_UP:
 
             elevio_motorDirection(DIRN_UP);
             elevio_floorIndicator(elevio_floorSensor());
-            if(order_pos == current_pos){
+            if(ordered_store == current_pos){
                 elevio_motorDirection(DIRN_STOP);
                 STATE = OPEN_DOOR;
                 }
@@ -192,7 +192,7 @@ int main(){
 
             elevio_motorDirection(DIRN_DOWN);
             elevio_floorIndicator(elevio_floorSensor());
-            if(order_pos == current_pos){
+            if(ordered_store == current_pos){
                 elevio_motorDirection(DIRN_STOP);
                 STATE = OPEN_DOOR;
                 }
@@ -200,7 +200,6 @@ int main(){
             break;
 
         case OPEN_DOOR:
-
             elevio_doorOpenLamp(1);
             STATE = WAIT;
 
