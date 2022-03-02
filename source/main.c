@@ -9,13 +9,14 @@
 #include "modules/HeisUtils.h"
 
 enum Current_pos {
-    STORY_1 = 1, 
+    UNDEFINED = -10,
+    STORY_1 = 10, 
     BETWEEN_1_2 = 15,
-    STORY_2 = 2,
+    STORY_2 = 20,
     BETWEEN_2_3 = 25,
-    STORY_3 = 3,
+    STORY_3 = 30,
     BEETWEEN_3_4 = 35,
-    STORY_4 = 4,
+    STORY_4 = 40,
 }; 
 
 enum States {
@@ -31,18 +32,25 @@ enum States {
     OPEN_DOORS_STOP = 9,
 };
 
-int main(){
-    int STATE = INIT_STATE;
-    int inputs[] = {0,0,0,0,0,0,0,0,0,0,0,0};
-    int current_pos = -1;
-    int last_pos = -1;
-    int motor_direction = 0;
+enum Motor_direction {
+    DOWN = -1,
+    STILL = 0,
+    UP = 1,
+};
+
+int64_t main(){
+    int64_t STATE = INIT_STATE;
+    int64_t inputs[] = {0,0,0,0,0,0,0,0,0,0,0,0};
+    int64_t current_pos = UNDEFINED;
+    int64_t last_pos = UNDEFINED;
+    int64_t motor_direction = STILL;
+    int64_t last_motor_direction = STILL;
 
 
     while(1){
         
         // read inputs
-        int diff_t = clock();
+        int64_t diff_t = clock();
         if(elevio_callButton(0, 0) == 1){ inputs[0] = diff_t; elevio_buttonLamp(0, 0, 1);} else{inputs[0] = 0;}
         if(elevio_callButton(0, 2) == 1){ inputs[1] = diff_t; elevio_buttonLamp(0, 2, 1);} else{inputs[1] = 0;}
         if(elevio_callButton(1, 0) == 1){ inputs[2] = diff_t; elevio_buttonLamp(1, 0, 1);} else{inputs[2] = 0;}
@@ -57,14 +65,31 @@ int main(){
         if(elevio_stopButton() == 1){ inputs[11] = diff_t;}
 
         // get current position, and save last known position
-        if(current_pos != -1){
+        if(current_pos != UNDEFINED){
             last_pos = current_pos;
         }
-        int floor_sensor = elevio_floorSensor();
-        if(floor_sensor != -1)){
+
+        if(motor_direction != STILL){
+            last_motor_direction = motor_direction;
+        }
+
+        int64_t floor_sensor = elevio_floorSensor() * 10;
+        if(floor_sensor != UNDEFINED){
             current_pos = floor_sensor;
-        } else if(floor_sensor == -1){
-            
+        } else if(floor_sensor == UNDEFINED && last_pos != UNDEFINED){
+            if(motor_direction == UP){
+                current_pos = last_pos + 10;
+            } else if (motor_direction == DOWN){
+                current_pos = last_pos + 1;
+            } else if (motor_direction == STILL){
+                if(last_motor_direction == STILL){
+                    STATE = INIT_STATE;
+                }
+                else if(last_motor_direction == UP){
+                    current_pos = last
+                }
+            }
+
         }
 
         switch (STATE)
@@ -72,31 +97,31 @@ int main(){
         case  INIT_STATE:
             /* code */
             break;
-        case /* constant-expression */:
+        case IDLE:
             /* code */
             break;
-        case /* constant-expression */:
+        case GO_UP:
             /* code */
             break;
-        case /* constant-expression */:
+        case GO_DOWN:
             /* code */
             break;
-        case /* constant-expression */:
+        case OPEN_DOOR:
             /* code */
             break;
-        case /* constant-expression */:
+        case CLOSE_DOOR:
             /* code */
             break;
-        case /* constant-expression */:
+        case WAIT:
             /* code */
             break;
-        case /* constant-expression */:
+        case STOP:
             /* code */
             break;
-        case /* constant-expression */:
+        case WAIT_STOP:
             /* code */
             break;
-        case /* constant-expression */:
+        case OPEN_DOORS_STOP:
             /* code */
             break;
         
