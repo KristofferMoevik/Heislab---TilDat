@@ -76,20 +76,29 @@ int64_t main(){
         int64_t floor_sensor = elevio_floorSensor() * 10;
         if(floor_sensor != UNDEFINED){
             current_pos = floor_sensor;
-        } else if(floor_sensor == UNDEFINED && last_pos != UNDEFINED){
+        } 
+        else if(floor_sensor == UNDEFINED && last_pos != UNDEFINED && last_motor_direction != UNDEFINED){
             if(motor_direction == UP){
-                current_pos = last_pos + 10;
-            } else if (motor_direction == DOWN){
-                current_pos = last_pos + 1;
-            } else if (motor_direction == STILL){
+                current_pos = last_pos + 5;
+            } 
+            else if (motor_direction == DOWN){
+                current_pos = last_pos - 5;
+            } 
+            else if (motor_direction == STILL){
                 if(last_motor_direction == STILL){
                     STATE = INIT_STATE;
                 }
                 else if(last_motor_direction == UP){
-                    current_pos = last
+                    current_pos = last_pos + 5;
+                }
+                else if(last_motor_direction == DOWN){
+                    current_pos = last_pos - 5;
                 }
             }
 
+        }
+        else{
+            STATE = INIT_STATE;
         }
 
         switch (STATE)
