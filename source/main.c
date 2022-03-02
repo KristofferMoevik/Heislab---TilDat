@@ -105,7 +105,10 @@ int main(){
             }
             else if(earliest_value == 8 || earliest_value == 9){
                 ordered_store = 4;
-            }            
+            }         
+            else{
+                ordered_store = 0;
+            }   
             
         }
         printf("  earliest value = %" PRId64 " ordered_store = %" PRId64"\n", earliest, ordered_store);
