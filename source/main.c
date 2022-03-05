@@ -180,9 +180,19 @@ int main(){
                 if(ordered_store > current_pos){STATE = GO_UP;};
             }
 
+            if(ordered_store == 0){
+                STATE = IDLE;
+            }
+            if(ordered_store != 0){
+                if(ordered_store == current_pos){STATE = OPEN_DOOR;};
+                if(ordered_store < current_pos){STATE = GO_DOWN;};
+                if(ordered_store > current_pos){STATE = GO_UP;};
+            }
+
             break;
 
         case GO_UP:
+<<<<<<< HEAD
             //printf("State = GO_UP \n");
             elevio_floorIndicator(elevio_floorSensor());
             if(ordered_store == current_pos){
@@ -193,6 +203,10 @@ int main(){
                 elevio_motorDirection(DIRN_UP);
             }
             
+=======
+
+            printf("State = GO_UP");
+>>>>>>> 2183af2a9384778dfc7cfe58cdd42f55f5a14316
             break;
 
         case GO_DOWN:
@@ -200,7 +214,12 @@ int main(){
             break;
 
         case OPEN_DOOR:
+<<<<<<< HEAD
             //printf("State = OPEN_DOOR");
+=======
+            printf("State = OPEN_DOOR");
+
+>>>>>>> 2183af2a9384778dfc7cfe58cdd42f55f5a14316
             break;
 
         case WAIT:
