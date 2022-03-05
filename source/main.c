@@ -54,6 +54,8 @@ int main(){
     int64_t last_motor_direction = STILL;
     int64_t timer = 0;
     int64_t time_elapsed;
+    int64_t stop = 0;
+    int64_t obstruction = 0;
 
 
     while(1){
@@ -72,8 +74,8 @@ int main(){
         if(elevio_callButton(2, 2) == 1){ inputs[7] = diff_t; elevio_buttonLamp(2, BUTTON_CAB, 1);} else{inputs[7] = 0;}
         if(elevio_callButton(3, 1) == 1){ inputs[8] = diff_t; elevio_buttonLamp(3, BUTTON_HALL_DOWN, 1);} else{inputs[8] = 0;}
         if(elevio_callButton(3, 2) == 1){ inputs[9] = diff_t; elevio_buttonLamp(3, BUTTON_CAB, 1);} else{inputs[9] = 0;}
-        if(elevio_obstruction() == 1){ inputs[10] = diff_t;}
-        if(elevio_stopButton() == 1){ inputs[11] = diff_t;}
+        if(elevio_obstruction() == 1){ inputs[10] = diff_t; obstruction = 1;} else{inputs[10] = 0; obstruction = 0;}
+        if(elevio_stopButton() == 1){ inputs[11] = diff_t; stop = 1;} else{inputs[11] = 0; stop = 0;}
         // printf("inputs = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", inputs[0], inputs[1], inputs[2], inputs[3], inputs[4], inputs[5], inputs[6], inputs[7], inputs[8], inputs[9], inputs[10], inputs[11]);
         
         // add orders, the lowest number is the next order
@@ -88,13 +90,13 @@ int main(){
         if((inputs[7] != 0) && (orders[7] == 0)){orders[7] = inputs[7];}
         if((inputs[8] != 0) && (orders[8] == 0)){orders[8] = inputs[8];}
         if((inputs[9] != 0) && (orders[9] == 0)){orders[9] = inputs[9];}
-        //printf("orders = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", orders[0], orders[1], orders[2], orders[3], orders[4], orders[5], orders[6], orders[7], orders[8], orders[9], orders[10], orders[11]);
+        printf("orders = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", orders[0], orders[1], orders[2], orders[3], orders[4], orders[5], orders[6], orders[7], orders[8], orders[9]);
 
         // set witch story to go to based on first order
         int64_t time;
         int64_t earliest = 9223372036854775807;
         int64_t earliest_value = -1;
-        for(int i = 0; i < 9; i++){
+        for(int i = 0; i < 10; i++){
             time = orders[i];
             if(time < earliest && time != 0){
                 earliest = time;
@@ -238,7 +240,7 @@ int main(){
             break;
 
         case WAIT:
-            printf("State = WAIT, time_ elapsed = %" PRId64 " \n", time_elapsed);
+            printf("State = WAIT, time_ elapsed = %" PRId64 " obstruction = %" PRId64 " \n", time_elapsed, obstruction);
             time_elapsed = ((int64_t)clock()/(int64_t)CLOCKS_PER_SEC) - ((int64_t)timer/(int64_t)CLOCKS_PER_SEC);
             if(time_elapsed >= 3){
                 STATE = CLOSE_DOOR;
@@ -246,7 +248,35 @@ int main(){
             break;
 
         case CLOSE_DOOR:
-  
+            printf("State = Closed_DOOR, obstruction = %" PRId64 " stop = %" PRId64 " \n", obstruction, stop);
+            if(obstruction == 0){
+                elevio_doorOpenLamp(0);
+                //[1 up, 1 cab, 2 up, 2 down, 2 cab, 3 up, 3 down, 3 cab, 4 down, 4 cab]
+                if(ordered_store == 10){
+                    orders[0] = 0;
+                    orders[1] = 0;
+                } 
+                if(ordered_store == 20){
+                    orders[2] = 0;
+                    orders[3] = 0;
+                    orders[4] = 0;
+                } 
+                if(ordered_store == 30){
+                    orders[5] = 0;
+                    orders[6] = 0;
+                    orders[7] = 0;
+                } 
+                if(ordered_store == 40){
+                    orders[8] = 0;
+                    orders[9] = 0;
+                } 
+                ordered_store = 0;
+                STATE = IDLE;
+            }
+            if(obstruction != 0){
+                STATE = WAIT;
+                timer = clock();
+            }
             break;
 
         case STOP:
