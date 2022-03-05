@@ -232,9 +232,10 @@ int main(){
             printf("State = OPEN_DOOR \n");
             if(elevio_floorSensor() != -1){
                 elevio_doorOpenLamp(1);
-                elevio_buttonLamp(ordered_store, 0, 0);// Turn off up_button lamp
-                elevio_buttonLamp(ordered_store, 1, 0);// Turn off down_button lamp
-                elevio_buttonLamp(ordered_store, 2, 0);// Turn off cab_button lamp
+                int64_t botton_lamp_floor = ordered_store - 1;
+                elevio_buttonLamp(botton_lamp_floor, 0, 0);// Turn off up_button lamp
+                elevio_buttonLamp(botton_lamp_floor, 1, 0);// Turn off down_button lamp
+                elevio_buttonLamp(botton_lamp_floor, 2, 0);// Turn off cab_button lamp
                 timer = clock();
                 STATE = WAIT; 
             }
