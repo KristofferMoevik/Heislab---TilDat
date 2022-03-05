@@ -53,6 +53,7 @@ int main(){
     while(1){
         
         // read inputs
+        // shape of input array: [1 Stop up, 1 Go to, 2 Stop up, 2 Stop down, 2 Go to, ..., 4 Stop down, 4 Go to, Stop, Obstruksjon]
         int64_t diff_t = (int64_t)clock();
         //printf("time = %" PRId64, diff_t); 
         if(elevio_callButton(0, 0) == 1){ inputs[0] = diff_t; elevio_buttonLamp(0, 0, 1);} else{inputs[0] = 0;}
@@ -70,17 +71,18 @@ int main(){
         // printf("inputs = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", inputs[0], inputs[1], inputs[2], inputs[3], inputs[4], inputs[5], inputs[6], inputs[7], inputs[8], inputs[9], inputs[10], inputs[11]);
         
         // add orders, the lowest number is the next order
-        if(inputs[0] > orders[0]){orders[0] = inputs[0];}
-        if(inputs[1] > orders[1]){orders[1] = inputs[1];}
-        if(inputs[2] > orders[2]){orders[2] = inputs[2];}
-        if(inputs[3] > orders[3]){orders[3] = inputs[3];}
-        if(inputs[4] > orders[4]){orders[4] = inputs[4];}
-        if(inputs[5] > orders[5]){orders[5] = inputs[5];}
-        if(inputs[6] > orders[6]){orders[6] = inputs[6];}
-        if(inputs[7] > orders[7]){orders[7] = inputs[7];}
-        if(inputs[8] > orders[8]){orders[8] = inputs[8];}
-        if(inputs[9] > orders[9]){orders[9] = inputs[9];}
-        //printf("orders = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "]", orders[0], orders[1], orders[2], orders[3], orders[4], orders[5], orders[6], orders[7], orders[8], orders[9], orders[10], orders[11]);
+        // shape of orders array: [1 up, 1 cab, 2 up, 2 down, 2 cab, 3 up, 3 down, 3 cab, 4 down, 4 cab]
+        if(inputs[0] < orders[0]){orders[0] = inputs[0];}
+        if((inputs[1] < orders[1]) || (orders[1] == 0)){orders[1] = inputs[1];}
+        if((inputs[2] < orders[2]) || (orders[2] == 0)){orders[2] = inputs[2];}
+        if((inputs[3] < orders[3]) || (orders[3] == 0)){orders[3] = inputs[3];}
+        if((inputs[4] < orders[4]) || (orders[4] == 0)){orders[4] = inputs[4];}
+        if((inputs[5] < orders[5]) || (orders[5] == 0)){orders[5] = inputs[5];}
+        if((inputs[6] < orders[6]) || (orders[6] == 0)){orders[6] = inputs[6];}
+        if((inputs[7] < orders[7]) || (orders[7] == 0)){orders[7] = inputs[7];}
+        if((inputs[8] < orders[8]) || (orders[8] == 0)){orders[8] = inputs[8];}
+        if((inputs[9] < orders[9]) || (orders[9] == 0)){orders[9] = inputs[9];}
+        printf("orders = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", orders[0], orders[1], orders[2], orders[3], orders[4], orders[5], orders[6], orders[7], orders[8], orders[9], orders[10], orders[11]);
 
         // set witch story to go to based on first order
         int64_t time;
@@ -95,23 +97,23 @@ int main(){
         }
         if(earliest_value > -1){
             if(earliest_value == 0 || earliest_value == 1){
-                ordered_store = 1;
+                ordered_store = 10;
             }
             else if(earliest_value == 2 || earliest_value == 3 || earliest_value == 4){
-                ordered_store = 2;
+                ordered_store = 20;
             }
             else if(earliest_value == 5 || earliest_value == 6 || earliest_value == 7){
-                ordered_store = 3;
+                ordered_store = 30;
             }
             else if(earliest_value == 8 || earliest_value == 9){
-                ordered_store = 4;
+                ordered_store = 40;
             }         
             else{
                 ordered_store = 0;
             }   
             
         }
-        printf("  earliest value = %" PRId64 " ordered_store = %" PRId64"\n", earliest, ordered_store);
+        //printf("  earliest value = %" PRId64 " ordered_store = %" PRId64"\n", earliest, ordered_store);
         // get current position, and save last known position
         if(current_pos != UNDEFINED){
             last_pos = current_pos;
@@ -121,7 +123,7 @@ int main(){
             last_motor_direction = motor_direction;
         }
 
-        int64_t floor_sensor = elevio_floorSensor() * 10;
+        int64_t floor_sensor = (elevio_floorSensor() + 1) * 10;
         if(floor_sensor != UNDEFINED){
             current_pos = floor_sensor;
         } 
@@ -155,19 +157,20 @@ int main(){
         switch (STATE)
         {
         case  INIT_STATE:
-            printf("State = INIT_STATE");
-            elevio_motorDirection(DIRN_DOWN); 
-            if (elevio_floorSensor() == 1 || elevio_floorSensor() == 2 || elevio_floorSensor() == 3 || elevio_floorSensor() == 4){
+            //printf("State = INIT_STATE, current_pos: %" PRId64 " \n", current_pos);
+            if (current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40){
                 elevio_motorDirection(DIRN_STOP);
                 elevio_floorIndicator(elevio_floorSensor());
-                current_pos = elevio_floorSensor();
                 STATE = IDLE;
-                }
+            }
+            else{
+                elevio_motorDirection(DIRN_DOWN);
+            }
 
             break;
 
         case IDLE:
-            printf("State = IDLE");
+            //printf("State = IDLE \n");
             if(ordered_store == 0){
                 STATE = IDLE;
             }
@@ -180,15 +183,24 @@ int main(){
             break;
 
         case GO_UP:
-            printf("State = GO_UP");
+            //printf("State = GO_UP \n");
+            elevio_floorIndicator(elevio_floorSensor());
+            if(ordered_store == current_pos){
+                elevio_motorDirection(DIRN_STOP);
+                STATE = OPEN_DOOR;
+            }
+            else{
+                elevio_motorDirection(DIRN_UP);
+            }
+            
             break;
 
         case GO_DOWN:
-            printf("State = GO_DOWN");
+            //printf("State = GO_DOWN");
             break;
 
         case OPEN_DOOR:
-            printf("State = OPEN_DOOR");
+            //printf("State = OPEN_DOOR");
             break;
 
         case WAIT:
