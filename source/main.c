@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h> 
 #include <signal.h>
 #include <string.h>
 #include <stdbool.h>
@@ -204,27 +204,91 @@ int main(){
             break;
 
         case OPEN_DOOR:
-            elevio_doorOpenLamp(1);
-            STATE = WAIT;
+            elevio_doorOpenLamp(1); //Turn on open_door lamp
+            
+            elevio_buttonLamp(ordered_store, 0, 0);// Turn off up_button lamp
+            elevio_buttonLamp(ordered_store, 1, 0);// Turn off down_button lamp
+            elevio_buttonLamp(ordered_store, 2, 0);// Turn off cab_button lamp
 
+            STATE = WAIT;
 
             break;
 
         case WAIT:
+            // VIf obstruction, stay in wait
+            if(elevio_obstruction() == 1){
+                STATE = WAIT;
+            }
+            // If not obstruction, wat 3 sec and then close doors
+            if(elevio_obstruction() == 0){
+
+                //3 sek timer
+
+                STATE = CLOSE_DOOR;
+            }
 
             break;
 
         case CLOSE_DOOR:
+            elevio_doorOpenLamp(0); //Turn off open-door lamp
+
+            //Delete orders to current_pos
+            if (ordered_store == 1){
+                orders[0] = 0;
+                orders[1] = 0;
+            }
+            if (ordered_store == 2){
+                orders[2] = 0;
+                orders[3] = 0;
+                orders[4] = 0;
+            }
+            if (ordered_store == 3){
+                orders[5] = 0;
+                orders[6] = 0;
+                orders[7] = 0;
+            }
+            if (ordered_store == 4){
+                orders[8] = 0;
+                orders[9] = 0;
+            }
+            STATE = IDLE;
   
             break;
 
         case STOP:
+            elevio_stopLamp(1); //Turn on stop_lamp
+
+            for (int order_nr = 0; sizeof(orders); ++order_nr){ //Clear all orders
+                orders[order_nr] = 0;
+            }
+            if(orders[10] = 1){ //If stop_button is kept in
+                STATE = STOP;
+            }
+            if(orders[10] = 0){
+                elevio_stopLamp(0);
+                if(current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40){
+                    STATE = OPEN_DOORS_STOP;
+                }
+                if(current_pos == 15 || current_pos == 25 || current_pos == 35){
+                    STATE = WAIT_STOP;
+                }
+            }
+
             
             break;
         case WAIT_STOP:
+
+            if(ordered_store == 0){
+                STATE = WAIT_STOP;
+            }
+            if(ordered_store != 0){
+                if(ordered_store < current_pos){STATE = GO_DOWN;};
+                if(ordered_store > current_pos){STATE = GO_UP;};
+            }
             
             break;
         case OPEN_DOORS_STOP:
+            STATE = WAIT;
             
             break;
         
