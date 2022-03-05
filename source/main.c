@@ -177,9 +177,19 @@ int main(){
                 if(ordered_store > current_pos){STATE = GO_UP;};
             }
 
+            if(ordered_store == 0){
+                STATE = IDLE;
+            }
+            if(ordered_store != 0){
+                if(ordered_store == current_pos){STATE = OPEN_DOOR;};
+                if(ordered_store < current_pos){STATE = GO_DOWN;};
+                if(ordered_store > current_pos){STATE = GO_UP;};
+            }
+
             break;
 
         case GO_UP:
+
             printf("State = GO_UP");
             break;
 
@@ -189,6 +199,7 @@ int main(){
 
         case OPEN_DOOR:
             printf("State = OPEN_DOOR");
+
             break;
 
         case WAIT:
