@@ -261,10 +261,10 @@ int main(){
             for (int order_nr = 0; sizeof(orders); ++order_nr){ //Clear all orders
                 orders[order_nr] = 0;
             }
-            if(orders[10] = 1){ //If stop_button is kept in
+            if(orders[10] == 1){ //If stop_button is kept in
                 STATE = STOP;
             }
-            if(orders[10] = 0){
+            if(orders[10] == 0){
                 elevio_stopLamp(0);
                 if(current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40){
                     STATE = OPEN_DOORS_STOP;
