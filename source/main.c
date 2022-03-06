@@ -208,7 +208,7 @@ int main(){
                 elevio_floorIndicator(get_floor_to_indicate(current_pos));
                 STATE = OPEN_DOOR;
             }
-            else if((current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40)){
+            else if((current_pos == 20 || current_pos == 30)){
                 if(current_pos == 20 && (orders[2] != 0 || orders[4] != 0)){
                     elevio_motorDirection(DIRN_STOP);
                     motor_direction = DIRN_STOP;
@@ -242,7 +242,7 @@ int main(){
                 elevio_floorIndicator(get_floor_to_indicate(current_pos));
                 STATE = OPEN_DOOR;
             }
-            else if((current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40)){
+            else if((current_pos == 20 || current_pos == 30)){
                 if(current_pos == 20 && (orders[3] != 0 || orders[4] != 0)){
                     elevio_motorDirection(DIRN_STOP);
                     motor_direction = DIRN_STOP;
