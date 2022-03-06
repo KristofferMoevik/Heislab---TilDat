@@ -132,10 +132,12 @@ int main(){
             last_motor_direction = motor_direction;
         }
 
+
         int64_t floor_sensor = (elevio_floorSensor() + 1) * 10;
         if(floor_sensor != UNDEFINED){
             current_pos = floor_sensor;
         } 
+        
         else if(floor_sensor == UNDEFINED && last_pos != UNDEFINED && last_motor_direction != UNDEFINED){
             if(motor_direction == UP){
                 current_pos = last_pos + 5;
@@ -158,9 +160,19 @@ int main(){
             }
 
         }
+
         else{
             STATE = INIT_STATE;
         }
+
+        // For testing
+        int pos_value = current_pos; 
+        int last_value = last_pos;
+        printf("Pos = %d\n", pos_value);
+        printf("Last Pos = %d\n", last_value);
+        printf("Floor sensor (func) = %d", elevio_floorSensor());
+        int floor_value = floor_sensor;
+        printf("Floor sensor= %d", floor_value);
 
         if(stop == 1){
             STATE = STOP;
@@ -283,6 +295,10 @@ int main(){
 
         case STOP:
             printf("State = STOP \n");
+            //For testing
+            int position_1 = current_pos;
+            printf("Current pos = %d\n", position_1);
+
             if(stop == 1){
                 elevio_stopLamp(1); //Turn on stop_lamp
                 elevio_motorDirection(DIRN_STOP); //Stop elevator
@@ -310,19 +326,31 @@ int main(){
             break;
 
         case WAIT_STOP:
+            //For testing
             printf("State = WAIT_STOP \n");
+            int position = current_pos;
+            printf("Current pos = %d\n", position);
+            int position_2 = last_pos;
+            printf("Last pos = %d\n", position_2);
+            int direction = last_motor_direction;
+            printf("Last direction = %d\n", direction);
+
+
+            
 
             if(ordered_store == 0){
                 STATE = WAIT_STOP;
             }
-            if(ordered_store != 0){
-                if(ordered_store < current_pos){
-                    STATE = GO_DOWN;
-                }
-                if(ordered_store > current_pos){
-                    STATE = GO_UP;
-                }
-            }
+            // if(ordered_store < last_pos){
+            //     STATE = GO_DOWN;
+            // }
+            // if(ordered_store > last_pos){
+            //     STATE = GO_UP;
+            // }
+            // if(ordered_store == last_pos){
+            //     STATE = IDLE;
+            // }
+    
             
             break;
 
