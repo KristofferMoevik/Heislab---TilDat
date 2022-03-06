@@ -162,6 +162,12 @@ int main(){
             STATE = INIT_STATE;
         }
 
+        if(STATE == OPEN_DOOR || STATE == WAIT){
+            elevio_buttonLamp(get_floor_to_indicate(ordered_store), 0, 0);// Turn off up_button lamp
+            elevio_buttonLamp(get_floor_to_indicate(ordered_store), 1, 0);// Turn off down_button lamp
+            elevio_buttonLamp(get_floor_to_indicate(ordered_store), 2, 0);// Turn off cab_button lamp
+        }
+
         
         switch (STATE)
         {
@@ -233,9 +239,9 @@ int main(){
             printf("State = OPEN_DOOR \n");
             if(elevio_floorSensor() != -1){
                 elevio_doorOpenLamp(1);
-                elevio_buttonLamp(get_floor_to_indicate(ordered_store), 0, 0);// Turn off up_button lamp
-                elevio_buttonLamp(get_floor_to_indicate(ordered_store), 1, 0);// Turn off down_button lamp
-                elevio_buttonLamp(get_floor_to_indicate(ordered_store), 2, 0);// Turn off cab_button lamp
+                //elevio_buttonLamp(get_floor_to_indicate(ordered_store), 0, 0);// Turn off up_button lamp
+                //elevio_buttonLamp(get_floor_to_indicate(ordered_store), 1, 0);// Turn off down_button lamp
+                //elevio_buttonLamp(get_floor_to_indicate(ordered_store), 2, 0);// Turn off cab_button lamp
                 timer = clock();
                 STATE = WAIT; 
             }
@@ -245,7 +251,7 @@ int main(){
         case WAIT:
             printf("State = WAIT, time_ elapsed = %" PRId64 " obstruction = %" PRId64 " \n", time_elapsed, obstruction);
             time_elapsed = ((int64_t)clock()/(int64_t)CLOCKS_PER_SEC) - ((int64_t)timer/(int64_t)CLOCKS_PER_SEC);
-            if(time_elapsed >= 2){
+            if(time_elapsed >= 0.5){
                 STATE = CLOSE_DOOR;
             }
             break;
