@@ -150,12 +150,10 @@ int main(){
                     STATE = INIT_STATE;
                 }
                 else if(last_motor_direction == DIRN_UP){
-
                     current_pos = last_pos + 5;
                 }
                 else if(last_motor_direction == DIRN_DOWN){
                     current_pos = last_pos - 5;
-
                 }
             }
 
