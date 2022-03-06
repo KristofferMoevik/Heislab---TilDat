@@ -162,7 +162,7 @@ int main(){
             STATE = INIT_STATE;
         }
 
-        if(stop == 1){
+        if(stop == 1 && STATE != INIT_STATE){
             STATE = STOP;
         }
         
