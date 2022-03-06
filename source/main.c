@@ -163,6 +163,10 @@ int main(){
         else{
             STATE = INIT_STATE;
         }
+
+        if(stop == 1){
+            STATE = STOP;
+        }
         
         printf("current_pos = %" PRId64 " last_pos = %" PRId64 "motor_dir = %" PRId64 "last_motor_dir = %" PRId64 "\n", current_pos, last_pos, motor_direction, last_motor_direction);
 
@@ -269,9 +273,9 @@ int main(){
             printf("State = OPEN_DOOR \n");
             if(elevio_floorSensor() != -1){
                 elevio_doorOpenLamp(1);
-                elevio_buttonLamp(get_floor_to_indicate(ordered_store), 0, 0);// Turn off up_button lamp
-                elevio_buttonLamp(get_floor_to_indicate(ordered_store), 1, 0);// Turn off down_button lamp
-                elevio_buttonLamp(get_floor_to_indicate(ordered_store), 2, 0);// Turn off cab_button lamp
+                elevio_buttonLamp(get_floor_to_indicate(current_pos), 0, 0);// Turn off up_button lamp
+                elevio_buttonLamp(get_floor_to_indicate(current_pos), 1, 0);// Turn off down_button lamp
+                elevio_buttonLamp(get_floor_to_indicate(current_pos), 2, 0);// Turn off cab_button lamp
                 timer = ((double)clock()/(double)CLOCKS_PER_SEC);
                 STATE = WAIT; 
             }
@@ -282,9 +286,9 @@ int main(){
             clock_time = ((double)clock()/(double)CLOCKS_PER_SEC);
             time_elapsed = clock_time - timer;
             printf("State = WAIT, time_ elapsed = %f obstruction = %" PRId64 " \n", time_elapsed, obstruction);
-            elevio_buttonLamp(get_floor_to_indicate(ordered_store), 0, 0);// Turn off up_button lamp
-            elevio_buttonLamp(get_floor_to_indicate(ordered_store), 1, 0);// Turn off down_button lamp
-            elevio_buttonLamp(get_floor_to_indicate(ordered_store), 2, 0);// Turn off cab_button lamp
+            elevio_buttonLamp(get_floor_to_indicate(current_pos), 0, 0);// Turn off up_button lamp
+            elevio_buttonLamp(get_floor_to_indicate(current_pos), 1, 0);// Turn off down_button lamp
+            elevio_buttonLamp(get_floor_to_indicate(current_pos), 2, 0);// Turn off cab_button lamp
             if(time_elapsed >= 0.3){
                 STATE = CLOSE_DOOR;
             }
@@ -317,8 +321,8 @@ int main(){
                 STATE = IDLE;
             }
             if(obstruction != 0){
+                timer = ((double)clock()/(double)CLOCKS_PER_SEC);
                 STATE = WAIT;
-                //timer = clock();
             }
             break;
 
@@ -370,7 +374,8 @@ int main(){
 
         case OPEN_DOORS_STOP:
             printf("State = OPEN_DOOR_STOP \n");
-
+            elevio_doorOpenLamp(1);
+            timer = ((double)clock()/(double)CLOCKS_PER_SEC);
             STATE = WAIT;
             
             break;
