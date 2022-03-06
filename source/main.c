@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h> 
 #include <signal.h>
 #include <string.h>
 #include <stdbool.h>
@@ -46,14 +46,15 @@ int main(){
     elevio_init();
     int64_t STATE = INIT_STATE;
     int64_t inputs[] = {0,0,0,0,0,0,0,0,0,0,0,0};
-    int64_t orders[] = {0,0,0,0,0,0,0,0,0,0};
+    int64_t orders[] = {0,0,0,0,0,0,0,0,0,0,0,0};
     int64_t ordered_store = 0;
     int64_t current_pos = UNDEFINED;
     int64_t last_pos = UNDEFINED;
     int64_t motor_direction = STILL;
     int64_t last_motor_direction = STILL;
-    int64_t timer = 0;
-    int64_t time_elapsed;
+    double timer = 0;
+    double time_elapsed;
+    double clock_time;
     int64_t stop = 0;
     int64_t obstruction = 0;
 
@@ -63,7 +64,7 @@ int main(){
         // read inputs
         // shape of input array: [1 up, 1 cab, 2 up, 2 down, 2 cab, 3 up, 3 down, 3 cab, 4 down, 4 cab, Stop, Obstruksjon]
         int64_t diff_t = (int64_t)clock();
-        //printf("time = %" PRId64, diff_t); 
+        //printf("time_of_order= %" PRId64, diff_t); 
         if(elevio_callButton(0, 0) == 1){ inputs[0] = diff_t; elevio_buttonLamp(0, BUTTON_HALL_UP, 1);} else{inputs[0] = 0;}
         if(elevio_callButton(0, 2) == 1){ inputs[1] = diff_t; elevio_buttonLamp(0, BUTTON_CAB, 1);} else{inputs[1] = 0;}
         if(elevio_callButton(1, 0) == 1){ inputs[2] = diff_t; elevio_buttonLamp(1, BUTTON_HALL_UP, 1);} else{inputs[2] = 0;}
@@ -90,16 +91,17 @@ int main(){
         if((inputs[7] != 0) && (orders[7] == 0)){orders[7] = inputs[7];}
         if((inputs[8] != 0) && (orders[8] == 0)){orders[8] = inputs[8];}
         if((inputs[9] != 0) && (orders[9] == 0)){orders[9] = inputs[9];}
-        printf("orders = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", orders[0], orders[1], orders[2], orders[3], orders[4], orders[5], orders[6], orders[7], orders[8], orders[9]);
+        if((inputs[11] != 0) && (orders[11] == 0)){orders[11] = inputs[11];}
+        printf("orders = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", orders[0], orders[1], orders[2], orders[3], orders[4], orders[5], orders[6], orders[7], orders[8], orders[9], orders[10], orders[11]);
 
         // set witch story to go to based on first order
-        int64_t time;
+        int64_t time_of_order;
         int64_t earliest = 9223372036854775807;
         int64_t earliest_value = -1;
         for(int i = 0; i < 10; i++){
-            time = orders[i];
-            if(time < earliest && time != 0){
-                earliest = time;
+            time_of_order= orders[i];
+            if(time_of_order< earliest && time_of_order!= 0){
+                earliest = time_of_order;
                 earliest_value = i;
             }
         }
@@ -122,6 +124,7 @@ int main(){
             
         }
         printf("  earliest value = %" PRId64 " ordered_store = %" PRId64"\n", earliest, ordered_store);
+        
         // get current position, and save last known position
         if(current_pos != UNDEFINED && (current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40)){
             last_pos = current_pos;
@@ -132,25 +135,25 @@ int main(){
         }
 
         int64_t floor_sensor = (elevio_floorSensor() + 1) * 10;
-        if(floor_sensor != UNDEFINED){
+        if(floor_sensor != 0){
             current_pos = floor_sensor;
         } 
-        else if(floor_sensor == UNDEFINED && last_pos != UNDEFINED && last_motor_direction != UNDEFINED){
-            if(motor_direction == UP){
+        else if(floor_sensor == 0 && last_pos != UNDEFINED && last_motor_direction != UNDEFINED){
+            if(motor_direction == DIRN_UP){
                 current_pos = last_pos + 5;
             } 
-            else if (motor_direction == DOWN){
+            else if (motor_direction == DIRN_DOWN){
                 current_pos = last_pos - 5;
             } 
-            else if (motor_direction == STILL){
-                if(last_motor_direction == STILL){
+            else if (motor_direction == DIRN_STOP){
+                if(last_motor_direction == DIRN_STOP){
                     STATE = INIT_STATE;
                 }
-                else if(last_motor_direction == UP){
+                else if(last_motor_direction == DIRN_UP){
 
                     current_pos = last_pos + 5;
                 }
-                else if(last_motor_direction == DOWN){
+                else if(last_motor_direction == DIRN_DOWN){
                     current_pos = last_pos - 5;
 
                 }
@@ -161,6 +164,12 @@ int main(){
             STATE = INIT_STATE;
         }
 
+        if(stop == 1){
+            STATE = STOP;
+        }
+        
+        printf("current_pos = %" PRId64 " last_pos = %" PRId64 "motor_dir = %" PRId64 "last_motor_dir = %" PRId64 "\n", current_pos, last_pos, motor_direction, last_motor_direction);
+
         
         switch (STATE)
         {
@@ -168,26 +177,19 @@ int main(){
             printf("State = INIT_STATE, current_pos: %" PRId64 " \n", current_pos);
             if (current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40){
                 elevio_motorDirection(DIRN_STOP);
+                motor_direction = DIRN_STOP;
                 elevio_floorIndicator(get_floor_to_indicate(current_pos));
                 STATE = IDLE;
             }
             else{
                 elevio_motorDirection(DIRN_DOWN);
+                motor_direction = DIRN_DOWN;
             }
 
             break;
 
         case IDLE:
             printf("State = IDLE \n");
-            if(ordered_store == 0){
-                STATE = IDLE;
-            }
-            if(ordered_store != 0){
-                if(ordered_store == current_pos){STATE = OPEN_DOOR;};
-                if(ordered_store < current_pos){STATE = GO_DOWN;};
-                if(ordered_store > current_pos){STATE = GO_UP;};
-            }
-
             if(ordered_store == 0){
                 STATE = IDLE;
             }
@@ -204,11 +206,30 @@ int main(){
             elevio_floorIndicator(get_floor_to_indicate(last_pos));
             if(ordered_store == current_pos){
                 elevio_motorDirection(DIRN_STOP);
+                motor_direction = DIRN_STOP;
                 elevio_floorIndicator(get_floor_to_indicate(current_pos));
                 STATE = OPEN_DOOR;
             }
+            else if((current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40)){
+                if(current_pos == 20 && (orders[2] != 0 || orders[4] != 0)){
+                    elevio_motorDirection(DIRN_STOP);
+                    motor_direction = DIRN_STOP;
+                    elevio_floorIndicator(get_floor_to_indicate(current_pos));
+                    STATE = OPEN_DOOR;
+                }
+                else if(current_pos == 30 && (orders[5] != 0 || orders[7] != 0)){
+                    elevio_motorDirection(DIRN_STOP);
+                    motor_direction = DIRN_STOP;
+                    elevio_floorIndicator(get_floor_to_indicate(current_pos));
+                    STATE = OPEN_DOOR;
+                }
+                else{
+                    elevio_motorDirection(DIRN_UP);
+                    motor_direction = DIRN_UP;
+                }
+            }
             else{
-                elevio_motorDirection(DIRN_UP);
+                
             }
             
             break;
@@ -218,11 +239,31 @@ int main(){
             elevio_floorIndicator(get_floor_to_indicate(last_pos));
             if(ordered_store == current_pos){
                 elevio_motorDirection(DIRN_STOP);
+                motor_direction = DIRN_STOP;
                 elevio_floorIndicator(get_floor_to_indicate(current_pos));
                 STATE = OPEN_DOOR;
             }
+            else if((current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40)){
+                if(current_pos == 20 && (orders[3] != 0 || orders[4] != 0)){
+                    elevio_motorDirection(DIRN_STOP);
+                    motor_direction = DIRN_STOP;
+                    elevio_floorIndicator(get_floor_to_indicate(current_pos));
+                    STATE = OPEN_DOOR;
+                }
+                else if(current_pos == 30 && (orders[6] != 0 || orders[7] != 0)){
+                    elevio_motorDirection(DIRN_STOP);
+                    motor_direction = DIRN_STOP;
+                    elevio_floorIndicator(get_floor_to_indicate(current_pos));
+                    STATE = OPEN_DOOR;
+                }
+                else{
+                    elevio_motorDirection(DIRN_DOWN);
+                    motor_direction = DIRN_DOWN;
+                }
+            }
             else{
                 elevio_motorDirection(DIRN_DOWN);
+                motor_direction = DIRN_DOWN;
             }
             
             
@@ -232,19 +273,23 @@ int main(){
             printf("State = OPEN_DOOR \n");
             if(elevio_floorSensor() != -1){
                 elevio_doorOpenLamp(1);
-                elevio_buttonLamp(get_floor_to_indicate(ordered_store), 0, 0);// Turn off up_button lamp
-                elevio_buttonLamp(get_floor_to_indicate(ordered_store), 1, 0);// Turn off down_button lamp
-                elevio_buttonLamp(get_floor_to_indicate(ordered_store), 2, 0);// Turn off cab_button lamp
-                timer = clock();
+                elevio_buttonLamp(get_floor_to_indicate(current_pos), 0, 0);// Turn off up_button lamp
+                elevio_buttonLamp(get_floor_to_indicate(current_pos), 1, 0);// Turn off down_button lamp
+                elevio_buttonLamp(get_floor_to_indicate(current_pos), 2, 0);// Turn off cab_button lamp
+                timer = ((double)clock()/(double)CLOCKS_PER_SEC);
                 STATE = WAIT; 
             }
             
             break;
 
         case WAIT:
-            printf("State = WAIT, time_ elapsed = %" PRId64 " obstruction = %" PRId64 " \n", time_elapsed, obstruction);
-            time_elapsed = ((int64_t)clock()/(int64_t)CLOCKS_PER_SEC) - ((int64_t)timer/(int64_t)CLOCKS_PER_SEC);
-            if(time_elapsed >= 2){
+            clock_time = ((double)clock()/(double)CLOCKS_PER_SEC);
+            time_elapsed = clock_time - timer;
+            printf("State = WAIT, time_ elapsed = %f obstruction = %" PRId64 " \n", time_elapsed, obstruction);
+            elevio_buttonLamp(get_floor_to_indicate(current_pos), 0, 0);// Turn off up_button lamp
+            elevio_buttonLamp(get_floor_to_indicate(current_pos), 1, 0);// Turn off down_button lamp
+            elevio_buttonLamp(get_floor_to_indicate(current_pos), 2, 0);// Turn off cab_button lamp
+            if(time_elapsed >= 0.3){
                 STATE = CLOSE_DOOR;
             }
             break;
@@ -254,21 +299,21 @@ int main(){
             if(obstruction == 0){
                 elevio_doorOpenLamp(0);
                 //[1 up, 1 cab, 2 up, 2 down, 2 cab, 3 up, 3 down, 3 cab, 4 down, 4 cab]
-                if(ordered_store == 10){
+                if(current_pos == 10){
                     orders[0] = 0;
                     orders[1] = 0;
                 } 
-                if(ordered_store == 20){
+                if(current_pos == 20){
                     orders[2] = 0;
                     orders[3] = 0;
                     orders[4] = 0;
                 } 
-                if(ordered_store == 30){
+                if(current_pos == 30){
                     orders[5] = 0;
                     orders[6] = 0;
                     orders[7] = 0;
                 } 
-                if(ordered_store == 40){
+                if(current_pos == 40){
                     orders[8] = 0;
                     orders[9] = 0;
                 } 
@@ -276,18 +321,62 @@ int main(){
                 STATE = IDLE;
             }
             if(obstruction != 0){
+                timer = ((double)clock()/(double)CLOCKS_PER_SEC);
                 STATE = WAIT;
-                timer = clock();
             }
             break;
 
         case STOP:
-            
+            printf("State = STOP \n");
+            if(stop == 1){
+                elevio_stopLamp(1); //Turn on stop_lamp
+                elevio_motorDirection(DIRN_STOP); //Stop elevator
+                motor_direction = DIRN_STOP;
+                
+                orders[0] = 0; orders[1] = 0; orders[2] = 0; orders[3] = 0; orders[4] = 0; orders[5] = 0; orders[6] = 0; orders[7] = 0;orders[8] = 0; orders[9] = 0; orders[10] = 0; orders[11] = 0;
+                ordered_store = 0;
+
+                elevio_buttonLamp(0, 0, 0); elevio_buttonLamp(0, 2, 0);
+                elevio_buttonLamp(1, 0, 0); elevio_buttonLamp(1, 1, 0); elevio_buttonLamp(1, 2, 0);
+                elevio_buttonLamp(2, 0, 0); elevio_buttonLamp(2, 1, 0); elevio_buttonLamp(2, 2, 0);
+                elevio_buttonLamp(3, 1, 0); elevio_buttonLamp(3, 2, 0);
+                
+
+                elevio_stopLamp(0);
+            }
+
+            if(current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40){
+                    ordered_store = current_pos;
+                    STATE = OPEN_DOORS_STOP;
+                }
+            else{
+                    STATE = WAIT_STOP;
+                }
+
             break;
+
         case WAIT_STOP:
+            printf("State = WAIT_STOP \n");
+
+            if(ordered_store == 0){
+                STATE = WAIT_STOP;
+            }
+            if(ordered_store != 0){
+                if(ordered_store < current_pos){
+                    STATE = GO_DOWN;
+                }
+                if(ordered_store > current_pos){
+                    STATE = GO_UP;
+                }
+            }
             
             break;
+
         case OPEN_DOORS_STOP:
+            printf("State = OPEN_DOOR_STOP \n");
+            elevio_doorOpenLamp(1);
+            timer = ((double)clock()/(double)CLOCKS_PER_SEC);
+            STATE = WAIT;
             
             break;
         
