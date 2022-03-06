@@ -281,6 +281,9 @@ int main(){
             break;
 
         case WAIT:
+            if(obstruction == 1){
+                timer = ((double)clock()/(double)CLOCKS_PER_SEC);
+            }
             clock_time = ((double)clock()/(double)CLOCKS_PER_SEC);
             time_elapsed = clock_time - timer;
             printf("State = WAIT, time_ elapsed = %f obstruction = %" PRId64 " \n", time_elapsed, obstruction);
@@ -319,7 +322,6 @@ int main(){
                 STATE = IDLE;
             }
             if(obstruction != 0){
-                timer = ((double)clock()/(double)CLOCKS_PER_SEC);
                 STATE = WAIT;
             }
             break;
