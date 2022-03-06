@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h> 
 #include <signal.h>
 #include <string.h>
 #include <stdbool.h>
@@ -46,7 +46,7 @@ int main(){
     elevio_init();
     int64_t STATE = INIT_STATE;
     int64_t inputs[] = {0,0,0,0,0,0,0,0,0,0,0,0};
-    int64_t orders[] = {0,0,0,0,0,0,0,0,0,0};
+    int64_t orders[] = {0,0,0,0,0,0,0,0,0,0,0,0};
     int64_t ordered_store = 0;
     int64_t current_pos = UNDEFINED;
     int64_t last_pos = UNDEFINED;
@@ -85,12 +85,13 @@ int main(){
         if((inputs[2] != 0) && (orders[2] == 0)){orders[2] = inputs[2];}
         if((inputs[3] != 0) && (orders[3] == 0)){orders[3] = inputs[3];}
         if((inputs[4] != 0) && (orders[4] == 0)){orders[4] = inputs[4];}
-        if((inputs[0] != 0) && (orders[5] == 0)){orders[5] = inputs[5];}
+        if((inputs[5] != 0) && (orders[5] == 0)){orders[5] = inputs[5];}
         if((inputs[6] != 0) && (orders[6] == 0)){orders[6] = inputs[6];}
         if((inputs[7] != 0) && (orders[7] == 0)){orders[7] = inputs[7];}
         if((inputs[8] != 0) && (orders[8] == 0)){orders[8] = inputs[8];}
         if((inputs[9] != 0) && (orders[9] == 0)){orders[9] = inputs[9];}
-        printf("orders = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", orders[0], orders[1], orders[2], orders[3], orders[4], orders[5], orders[6], orders[7], orders[8], orders[9]);
+        if((inputs[11] != 0) && (orders[11] == 0)){orders[11] = inputs[11];}
+        printf("orders = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", orders[0], orders[1], orders[2], orders[3], orders[4], orders[5], orders[6], orders[7], orders[8], orders[9], orders[10], orders[11]);
 
         // set witch story to go to based on first order
         int64_t time;
@@ -161,6 +162,11 @@ int main(){
             STATE = INIT_STATE;
         }
 
+        if(stop == 1){
+            STATE = STOP;
+        }
+
+
         
         switch (STATE)
         {
@@ -179,15 +185,6 @@ int main(){
 
         case IDLE:
             printf("State = IDLE \n");
-            if(ordered_store == 0){
-                STATE = IDLE;
-            }
-            if(ordered_store != 0){
-                if(ordered_store == current_pos){STATE = OPEN_DOOR;};
-                if(ordered_store < current_pos){STATE = GO_DOWN;};
-                if(ordered_store > current_pos){STATE = GO_UP;};
-            }
-
             if(ordered_store == 0){
                 STATE = IDLE;
             }
@@ -232,9 +229,11 @@ int main(){
             printf("State = OPEN_DOOR \n");
             if(elevio_floorSensor() != -1){
                 elevio_doorOpenLamp(1);
+                elevio_buttonLamp(get_floor_to_indicate(ordered_store), 0, 0);// Turn off up_button lamp
+                elevio_buttonLamp(get_floor_to_indicate(ordered_store), 1, 0);// Turn off down_button lamp
+                elevio_buttonLamp(get_floor_to_indicate(ordered_store), 2, 0);// Turn off cab_button lamp
                 timer = clock();
-                STATE = WAIT;
-                
+                STATE = WAIT; 
             }
             
             break;
@@ -242,7 +241,10 @@ int main(){
         case WAIT:
             printf("State = WAIT, time_ elapsed = %" PRId64 " obstruction = %" PRId64 " \n", time_elapsed, obstruction);
             time_elapsed = ((int64_t)clock()/(int64_t)CLOCKS_PER_SEC) - ((int64_t)timer/(int64_t)CLOCKS_PER_SEC);
-            if(time_elapsed >= 3){
+            elevio_buttonLamp(get_floor_to_indicate(ordered_store), 0, 0);// Turn off up_button lamp
+            elevio_buttonLamp(get_floor_to_indicate(ordered_store), 1, 0);// Turn off down_button lamp
+            elevio_buttonLamp(get_floor_to_indicate(ordered_store), 2, 0);// Turn off cab_button lamp
+            if(time_elapsed >= 0.5){
                 STATE = CLOSE_DOOR;
             }
             break;
@@ -280,12 +282,54 @@ int main(){
             break;
 
         case STOP:
-            
+            printf("State = STOP \n");
+            if(stop == 1){
+                elevio_stopLamp(1); //Turn on stop_lamp
+                elevio_motorDirection(DIRN_STOP); //Stop elevator
+                
+                orders[0] = 0; orders[1] = 0; orders[2] = 0; orders[3] = 0; orders[4] = 0; orders[5] = 0; orders[6] = 0; orders[7] = 0;orders[8] = 0; orders[9] = 0; orders[10] = 0; orders[11] = 0;
+                ordered_store = 0;
+
+                elevio_buttonLamp(0, 0, 0); elevio_buttonLamp(0, 2, 0);
+                elevio_buttonLamp(1, 0, 0); elevio_buttonLamp(1, 1, 0); elevio_buttonLamp(1, 2, 0);
+                elevio_buttonLamp(2, 0, 0); elevio_buttonLamp(2, 1, 0); elevio_buttonLamp(2, 2, 0);
+                elevio_buttonLamp(3, 1, 0); elevio_buttonLamp(3, 2, 0);
+                
+
+                elevio_stopLamp(0);
+            }
+
+            if(current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40){
+                    ordered_store = current_pos;
+                    STATE = OPEN_DOORS_STOP;
+                }
+            else{
+                    STATE = WAIT_STOP;
+                }
+
             break;
+
         case WAIT_STOP:
+            printf("State = WAIT_STOP \n");
+
+            if(ordered_store == 0){
+                STATE = WAIT_STOP;
+            }
+            if(ordered_store != 0){
+                if(ordered_store < current_pos){
+                    STATE = GO_DOWN;
+                }
+                if(ordered_store > current_pos){
+                    STATE = GO_UP;
+                }
+            }
             
             break;
+
         case OPEN_DOORS_STOP:
+            printf("State = OPEN_DOOR_STOP \n");
+
+            STATE = WAIT;
             
             break;
         

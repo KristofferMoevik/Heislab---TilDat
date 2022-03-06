@@ -1,0 +1,11 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/home/student/Documents/group_11_all/Lab 1 - Heis/New_version/Heislab---TilDat-1'
+mkdir -p build/driver
+clang -o build/driver/elevio.o -c -Wall -g -std=gnu11 -fsanitize=address source/driver/elevio.c
+mkdir -p build
+clang -o build/main.o -c -Wall -g -std=gnu11 -fsanitize=address source/main.c
+mkdir -p build/modules
+clang -o build/modules/HeisUtils.o -c -Wall -g -std=gnu11 -fsanitize=address source/modules/HeisUtils.c
+clang build/driver/elevio.o build/main.o build/modules/HeisUtils.o -o elevator -fsanitize=address
+make: Leaving directory '/home/student/Documents/group_11_all/Lab 1 - Heis/New_version/Heislab---TilDat-1'
+ 
