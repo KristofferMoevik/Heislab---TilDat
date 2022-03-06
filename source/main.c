@@ -46,7 +46,7 @@ int main(){
     elevio_init();
     int64_t STATE = INIT_STATE;
     int64_t inputs[] = {0,0,0,0,0,0,0,0,0,0,0,0};
-    int64_t orders[] = {0,0,0,0,0,0,0,0,0,0};
+    int64_t orders[] = {0,0,0,0,0,0,0,0,0,0,0,0};
     int64_t ordered_store = 0;
     int64_t current_pos = UNDEFINED;
     int64_t last_pos = UNDEFINED;
@@ -90,7 +90,8 @@ int main(){
         if((inputs[7] != 0) && (orders[7] == 0)){orders[7] = inputs[7];}
         if((inputs[8] != 0) && (orders[8] == 0)){orders[8] = inputs[8];}
         if((inputs[9] != 0) && (orders[9] == 0)){orders[9] = inputs[9];}
-        printf("orders = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", orders[0], orders[1], orders[2], orders[3], orders[4], orders[5], orders[6], orders[7], orders[8], orders[9]);
+        if((inputs[11] != 0) && (orders[11] == 0)){orders[11] = inputs[11];}
+        printf("orders = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", orders[0], orders[1], orders[2], orders[3], orders[4], orders[5], orders[6], orders[7], orders[8], orders[9], orders[11]);
 
         // set witch story to go to based on first order
         int64_t time;
@@ -287,10 +288,10 @@ int main(){
             for (int order_nr = 0; sizeof(orders); ++order_nr){ //Clear all orders
                 orders[order_nr] = 0;
             }
-            if(orders[10] == 1){ //If stop_button is kept in
+            if(orders[11] == 1){ //If stop_button is kept in
                 STATE = STOP;
             }
-            if(orders[10] == 0){
+            if(orders[11] == 0){
                 elevio_stopLamp(0);
                 if(current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40){
                     STATE = OPEN_DOORS_STOP;
