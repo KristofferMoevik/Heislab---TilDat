@@ -124,6 +124,7 @@ int main(){
             
         }
         printf("  earliest value = %" PRId64 " ordered_store = %" PRId64"\n", earliest, ordered_store);
+        
         // get current position, and save last known position
         if(current_pos != UNDEFINED && (current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40)){
             last_pos = current_pos;
@@ -134,25 +135,25 @@ int main(){
         }
 
         int64_t floor_sensor = (elevio_floorSensor() + 1) * 10;
-        if(floor_sensor != UNDEFINED){
+        if(floor_sensor != 0){
             current_pos = floor_sensor;
         } 
-        else if(floor_sensor == UNDEFINED && last_pos != UNDEFINED && last_motor_direction != UNDEFINED){
-            if(motor_direction == UP){
+        else if(floor_sensor == 0 && last_pos != UNDEFINED && last_motor_direction != UNDEFINED){
+            if(motor_direction == DIRN_UP){
                 current_pos = last_pos + 5;
             } 
-            else if (motor_direction == DOWN){
+            else if (motor_direction == DIRN_DOWN){
                 current_pos = last_pos - 5;
             } 
-            else if (motor_direction == STILL){
-                if(last_motor_direction == STILL){
+            else if (motor_direction == DIRN_STOP){
+                if(last_motor_direction == DIRN_STOP){
                     STATE = INIT_STATE;
                 }
-                else if(last_motor_direction == UP){
+                else if(last_motor_direction == DIRN_UP){
 
                     current_pos = last_pos + 5;
                 }
-                else if(last_motor_direction == DOWN){
+                else if(last_motor_direction == DIRN_DOWN){
                     current_pos = last_pos - 5;
 
                 }
@@ -162,11 +163,8 @@ int main(){
         else{
             STATE = INIT_STATE;
         }
-
-        if(stop == 1){
-            STATE = STOP;
-        }
-
+        
+        printf("current_pos = %" PRId64 " last_pos = %" PRId64 "motor_dir = %" PRId64 "last_motor_dir = %" PRId64 "\n", current_pos, last_pos, motor_direction, last_motor_direction);
 
         
         switch (STATE)
@@ -175,11 +173,13 @@ int main(){
             printf("State = INIT_STATE, current_pos: %" PRId64 " \n", current_pos);
             if (current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40){
                 elevio_motorDirection(DIRN_STOP);
+                motor_direction = DIRN_STOP;
                 elevio_floorIndicator(get_floor_to_indicate(current_pos));
                 STATE = IDLE;
             }
             else{
                 elevio_motorDirection(DIRN_DOWN);
+                motor_direction = DIRN_DOWN;
             }
 
             break;
@@ -202,22 +202,26 @@ int main(){
             elevio_floorIndicator(get_floor_to_indicate(last_pos));
             if(ordered_store == current_pos){
                 elevio_motorDirection(DIRN_STOP);
+                motor_direction = DIRN_STOP;
                 elevio_floorIndicator(get_floor_to_indicate(current_pos));
                 STATE = OPEN_DOOR;
             }
             else if((current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40)){
                 if(current_pos == 20 && (orders[2] != 0 || orders[4] != 0)){
                     elevio_motorDirection(DIRN_STOP);
+                    motor_direction = DIRN_STOP;
                     elevio_floorIndicator(get_floor_to_indicate(current_pos));
                     STATE = OPEN_DOOR;
                 }
                 else if(current_pos == 30 && (orders[5] != 0 || orders[7] != 0)){
                     elevio_motorDirection(DIRN_STOP);
+                    motor_direction = DIRN_STOP;
                     elevio_floorIndicator(get_floor_to_indicate(current_pos));
                     STATE = OPEN_DOOR;
                 }
                 else{
                     elevio_motorDirection(DIRN_UP);
+                    motor_direction = DIRN_UP;
                 }
             }
             else{
@@ -231,26 +235,31 @@ int main(){
             elevio_floorIndicator(get_floor_to_indicate(last_pos));
             if(ordered_store == current_pos){
                 elevio_motorDirection(DIRN_STOP);
+                motor_direction = DIRN_STOP;
                 elevio_floorIndicator(get_floor_to_indicate(current_pos));
                 STATE = OPEN_DOOR;
             }
             else if((current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40)){
                 if(current_pos == 20 && (orders[3] != 0 || orders[4] != 0)){
                     elevio_motorDirection(DIRN_STOP);
+                    motor_direction = DIRN_STOP;
                     elevio_floorIndicator(get_floor_to_indicate(current_pos));
                     STATE = OPEN_DOOR;
                 }
                 else if(current_pos == 30 && (orders[6] != 0 || orders[7] != 0)){
                     elevio_motorDirection(DIRN_STOP);
+                    motor_direction = DIRN_STOP;
                     elevio_floorIndicator(get_floor_to_indicate(current_pos));
                     STATE = OPEN_DOOR;
                 }
                 else{
                     elevio_motorDirection(DIRN_DOWN);
+                    motor_direction = DIRN_DOWN;
                 }
             }
             else{
                 elevio_motorDirection(DIRN_DOWN);
+                motor_direction = DIRN_DOWN;
             }
             
             
@@ -318,6 +327,7 @@ int main(){
             if(stop == 1){
                 elevio_stopLamp(1); //Turn on stop_lamp
                 elevio_motorDirection(DIRN_STOP); //Stop elevator
+                motor_direction = DIRN_STOP;
                 
                 orders[0] = 0; orders[1] = 0; orders[2] = 0; orders[3] = 0; orders[4] = 0; orders[5] = 0; orders[6] = 0; orders[7] = 0;orders[8] = 0; orders[9] = 0; orders[10] = 0; orders[11] = 0;
                 ordered_store = 0;
