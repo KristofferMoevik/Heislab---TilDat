@@ -244,7 +244,7 @@ int main(){
         case WAIT:
             printf("State = WAIT, time_ elapsed = %" PRId64 " obstruction = %" PRId64 " \n", time_elapsed, obstruction);
             time_elapsed = ((int64_t)clock()/(int64_t)CLOCKS_PER_SEC) - ((int64_t)timer/(int64_t)CLOCKS_PER_SEC);
-            if(time_elapsed >= 3){
+            if(time_elapsed >= 2){
                 STATE = CLOSE_DOOR;
             }
             break;
