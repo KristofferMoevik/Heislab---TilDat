@@ -85,7 +85,7 @@ int main(){
         if((inputs[2] != 0) && (orders[2] == 0)){orders[2] = inputs[2];}
         if((inputs[3] != 0) && (orders[3] == 0)){orders[3] = inputs[3];}
         if((inputs[4] != 0) && (orders[4] == 0)){orders[4] = inputs[4];}
-        if((inputs[0] != 0) && (orders[5] == 0)){orders[5] = inputs[5];}
+        if((inputs[5] != 0) && (orders[5] == 0)){orders[5] = inputs[5];}
         if((inputs[6] != 0) && (orders[6] == 0)){orders[6] = inputs[6];}
         if((inputs[7] != 0) && (orders[7] == 0)){orders[7] = inputs[7];}
         if((inputs[8] != 0) && (orders[8] == 0)){orders[8] = inputs[8];}
