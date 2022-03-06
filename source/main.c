@@ -227,7 +227,8 @@ int main(){
                 }
             }
             else{
-                
+                elevio_motorDirection(DIRN_UP);
+                motor_direction = DIRN_UP;
             }
             
             break;
