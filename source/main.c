@@ -5,8 +5,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <time.h>
-#include "driver/elevio.h"
 #include <inttypes.h>
+#include "driver/elevio.h"
+#include "utils/order_sorting.h"
 
 enum Current_pos {
     UNDEFINED = -10,
@@ -94,36 +95,7 @@ int main(){
         if((inputs[11] != 0) && (orders[11] == 0)){orders[11] = inputs[11];}
         printf("orders = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", orders[0], orders[1], orders[2], orders[3], orders[4], orders[5], orders[6], orders[7], orders[8], orders[9], orders[10], orders[11]);
 
-        // set witch story to go to based on first order
-        int64_t time_of_order;
-        int64_t earliest = 9223372036854775807;
-        int64_t earliest_value = -1;
-        for(int i = 0; i < 10; i++){
-            time_of_order= orders[i];
-            if(time_of_order< earliest && time_of_order!= 0){
-                earliest = time_of_order;
-                earliest_value = i;
-            }
-        }
-        if(earliest_value > -1){
-            if(earliest_value == 0 || earliest_value == 1){
-                ordered_store = 10;
-            }
-            else if(earliest_value == 2 || earliest_value == 3 || earliest_value == 4){
-                ordered_store = 20;
-            }
-            else if(earliest_value == 5 || earliest_value == 6 || earliest_value == 7){
-                ordered_store = 30;
-            }
-            else if(earliest_value == 8 || earliest_value == 9){
-                ordered_store = 40;
-            }         
-            else{
-                ordered_store = 0;
-            }   
-            
-        }
-        printf("  earliest value = %" PRId64 " ordered_store = %" PRId64"\n", earliest, ordered_store);
+        ordered_store = order_soting_get_target_floor(orders, ordered_store);
         
         // get current position, and save last known position
         if(current_pos != UNDEFINED && (current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40)){
