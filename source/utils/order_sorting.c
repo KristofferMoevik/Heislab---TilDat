@@ -9,7 +9,7 @@
 #include "order_sorting.h"
 
 
-int order_soting_get_target_floor(int64_t orders[], int64_t ordered_store){
+int order_sorting_get_target_floor(int64_t orders[], int64_t ordered_store){
     // set witch story to go to based on first order
     int64_t time_of_order;
     int64_t earliest = 9223372036854775807;

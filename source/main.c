@@ -8,6 +8,7 @@
 #include <inttypes.h>
 #include "driver/elevio.h"
 #include "utils/order_sorting.h"
+#include "utils/pos_and_dir.h"
 
 enum Current_pos {
     UNDEFINED = -10,
@@ -49,6 +50,7 @@ int main(){
     int64_t inputs[] = {0,0,0,0,0,0,0,0,0,0,0,0};
     int64_t orders[] = {0,0,0,0,0,0,0,0,0,0,0,0};
     int64_t ordered_store = 0;
+    int64_t floor_sensor = -10;
     int64_t current_pos = UNDEFINED;
     int64_t last_pos = UNDEFINED;
     int64_t motor_direction = STILL;
@@ -61,11 +63,9 @@ int main(){
 
 
     while(1){
-        printf("\n");
-        // read inputs
-        // shape of input array: [1 up, 1 cab, 2 up, 2 down, 2 cab, 3 up, 3 down, 3 cab, 4 down, 4 cab, Stop, Obstruksjon]
-        int64_t diff_t = (int64_t)clock();
-        //printf("time_of_order= %" PRId64, diff_t); 
+        
+        // leser inputs inn i input arrayet 
+        int64_t diff_t = (int64_t)clock(); 
         if(elevio_callButton(0, 0) == 1){ inputs[0] = diff_t; elevio_buttonLamp(0, BUTTON_HALL_UP, 1);} else{inputs[0] = 0;}
         if(elevio_callButton(0, 2) == 1){ inputs[1] = diff_t; elevio_buttonLamp(0, BUTTON_CAB, 1);} else{inputs[1] = 0;}
         if(elevio_callButton(1, 0) == 1){ inputs[2] = diff_t; elevio_buttonLamp(1, BUTTON_HALL_UP, 1);} else{inputs[2] = 0;}
@@ -78,10 +78,8 @@ int main(){
         if(elevio_callButton(3, 2) == 1){ inputs[9] = diff_t; elevio_buttonLamp(3, BUTTON_CAB, 1);} else{inputs[9] = 0;}
         if(elevio_obstruction() == 1){ inputs[10] = diff_t; obstruction = 1;} else{inputs[10] = 0; obstruction = 0;}
         if(elevio_stopButton() == 1){ inputs[11] = diff_t; stop = 1;} else{inputs[11] = 0; stop = 0;}
-        // printf("inputs = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", inputs[0], inputs[1], inputs[2], inputs[3], inputs[4], inputs[5], inputs[6], inputs[7], inputs[8], inputs[9], inputs[10], inputs[11]);
         
-        // add orders, the lowest number is the next order
-        // shape of orders array: [1 up, 1 cab, 2 up, 2 down, 2 cab, 3 up, 3 down, 3 cab, 4 down, 4 cab]
+        // ordre arrayet settes til verdien til inputen, mm det allerede ligger en eldre ordre inne
         if((inputs[0] != 0) && (orders[0] == 0)){orders[0] = inputs[0];}
         if((inputs[1] != 0) && (orders[1] == 0)){orders[1] = inputs[1];}
         if((inputs[2] != 0) && (orders[2] == 0)){orders[2] = inputs[2];}
@@ -93,54 +91,24 @@ int main(){
         if((inputs[8] != 0) && (orders[8] == 0)){orders[8] = inputs[8];}
         if((inputs[9] != 0) && (orders[9] == 0)){orders[9] = inputs[9];}
         if((inputs[11] != 0) && (orders[11] == 0)){orders[11] = inputs[11];}
+
+        //printer ut ordrelisten
         printf("orders = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", orders[0], orders[1], orders[2], orders[3], orders[4], orders[5], orders[6], orders[7], orders[8], orders[9], orders[10], orders[11]);
-
-        ordered_store = order_soting_get_target_floor(orders, ordered_store);
         
-        // get current position, and save last known position
-        if(current_pos != UNDEFINED && (current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40)){
-            last_pos = current_pos;
-        }
+        // prioriterer hvilke ordre som skal betjenes forst basert paa naar ordren ble lagt inn
+        ordered_store = order_sorting_get_target_floor(orders, ordered_store);
+        
+        // finner posisjon, sist maalte posisjon og sist rettning heisen gikk i
+        floor_sensor = (elevio_floorSensor() + 1) * 10;
+        current_pos = pos_and_dir_get_current_pos(current_pos, motor_direction, floor_sensor, last_pos, last_motor_direction);
+        last_pos = pos_and_dir_get_last_pos(current_pos, last_pos);
+        last_motor_direction = pos_and_dir_get_last_motor_direction(motor_direction, last_motor_direction);
 
-        if(motor_direction != STILL){
-            last_motor_direction = motor_direction;
-        }
-
-        int64_t floor_sensor = (elevio_floorSensor() + 1) * 10;
-        if(floor_sensor != 0){
-            current_pos = floor_sensor;
-        } 
-        else if(floor_sensor == 0 && last_pos != UNDEFINED && last_motor_direction != UNDEFINED){
-            if(motor_direction == DIRN_UP){
-                current_pos = last_pos + 5;
-            } 
-            else if (motor_direction == DIRN_DOWN){
-                current_pos = last_pos - 5;
-            } 
-            else if (motor_direction == DIRN_STOP){
-                if(last_motor_direction == DIRN_STOP){
-                    STATE = INIT_STATE;
-                }
-                else if(last_motor_direction == DIRN_UP){
-                    current_pos = last_pos + 5;
-                }
-                else if(last_motor_direction == DIRN_DOWN){
-                    current_pos = last_pos - 5;
-                }
-            }
-
-        }
-        else{
-            STATE = INIT_STATE;
-        }
-
+        // om stoppknappen trykkes settes STATE til STOP
         if(stop == 1){
             STATE = STOP;
-        }
-        
-        printf("current_pos = %" PRId64 " last_pos = %" PRId64 "motor_dir = %" PRId64 "last_motor_dir = %" PRId64 "\n", current_pos, last_pos, motor_direction, last_motor_direction);
+        }        
 
-        
         switch (STATE)
         {
         case  INIT_STATE:
