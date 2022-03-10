@@ -93,6 +93,7 @@ int main(){
         if((inputs[11] != 0) && (orders[11] == 0)){orders[11] = inputs[11];}
 
         //printer ut ordrelisten
+        
         printf("orders = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", orders[0], orders[1], orders[2], orders[3], orders[4], orders[5], orders[6], orders[7], orders[8], orders[9], orders[10], orders[11]);
         
         // prioriterer hvilke ordre som skal betjenes forst basert paa naar ordren ble lagt inn
