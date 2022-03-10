@@ -9,6 +9,7 @@
 #include "driver/elevio.h"
 #include "utils/order_sorting.h"
 #include "utils/pos_and_dir.h"
+#include "utils/states.h"
 
 enum Current_pos {
     UNDEFINED = -10,
@@ -64,7 +65,7 @@ int main(){
 
     while(1){
         
-        // leser inputs inn i input arrayet 
+        // Reads in the inputs to the inputs array
         int64_t diff_t = (int64_t)clock(); 
         if(elevio_callButton(0, 0) == 1){ inputs[0] = diff_t; elevio_buttonLamp(0, BUTTON_HALL_UP, 1);} else{inputs[0] = 0;}
         if(elevio_callButton(0, 2) == 1){ inputs[1] = diff_t; elevio_buttonLamp(0, BUTTON_CAB, 1);} else{inputs[1] = 0;}
@@ -79,7 +80,7 @@ int main(){
         if(elevio_obstruction() == 1){ inputs[10] = diff_t; obstruction = 1;} else{inputs[10] = 0; obstruction = 0;}
         if(elevio_stopButton() == 1){ inputs[11] = diff_t; stop = 1;} else{inputs[11] = 0; stop = 0;}
         
-        // ordre arrayet settes til verdien til inputen, mm det allerede ligger en eldre ordre inne
+        // The orders array is set based on the values of the input array
         if((inputs[0] != 0) && (orders[0] == 0)){orders[0] = inputs[0];}
         if((inputs[1] != 0) && (orders[1] == 0)){orders[1] = inputs[1];}
         if((inputs[2] != 0) && (orders[2] == 0)){orders[2] = inputs[2];}
@@ -92,121 +93,47 @@ int main(){
         if((inputs[9] != 0) && (orders[9] == 0)){orders[9] = inputs[9];}
         if((inputs[11] != 0) && (orders[11] == 0)){orders[11] = inputs[11];}
 
-        //printer ut ordrelisten
-        
+        // Prints out the order list to terminal
         printf("orders = [%" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 ", %" PRId64 "] \n", orders[0], orders[1], orders[2], orders[3], orders[4], orders[5], orders[6], orders[7], orders[8], orders[9], orders[10], orders[11]);
         
-        // prioriterer hvilke ordre som skal betjenes forst basert paa naar ordren ble lagt inn
+        // Prioritizes what orders which should be handeled first based on time
         ordered_store = order_sorting_get_target_floor(orders, ordered_store);
         
-        // finner posisjon, sist maalte posisjon og sist rettning heisen gikk i
+        // Finds the position of the elevator, the last known position of the elevator, and the last known motor direction
         floor_sensor = (elevio_floorSensor() + 1) * 10;
         current_pos = pos_and_dir_get_current_pos(current_pos, motor_direction, floor_sensor, last_pos, last_motor_direction);
         last_pos = pos_and_dir_get_last_pos(current_pos, last_pos);
         last_motor_direction = pos_and_dir_get_last_motor_direction(motor_direction, last_motor_direction);
 
-        // om stoppknappen trykkes settes STATE til STOP
+        // If the stop button is pressed the STATE of the elevator is set to STOP
         if(stop == 1){
             STATE = STOP;
         }        
 
+        // Finite state machine for the elevator
         switch (STATE)
         {
         case  INIT_STATE:
+            // The INIT_STATE drives the elevator to the floor underneat
             printf("State = INIT_STATE, current_pos: %" PRId64 " \n", current_pos);
-            if (current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40){
-                elevio_motorDirection(DIRN_STOP);
-                motor_direction = DIRN_STOP;
-                elevio_floorIndicator(get_floor_to_indicate(current_pos));
-                STATE = IDLE;
-            }
-            else{
-                elevio_motorDirection(DIRN_DOWN);
-                motor_direction = DIRN_DOWN;
-            }
-
+            STATE = states_INIT_STATE(current_pos, &motor_direction, STATE);
             break;
 
         case IDLE:
+            // The IDLE state waits for a order. Based on the order it either goes up, down or opens the door.
             printf("State = IDLE \n");
-            if(ordered_store == 0){
-                STATE = IDLE;
-            }
-            if(ordered_store != 0){
-                if(ordered_store == current_pos){STATE = OPEN_DOOR;};
-                if(ordered_store < current_pos){STATE = GO_DOWN;};
-                if(ordered_store > current_pos){STATE = GO_UP;};
-            }
-
+            STATE = states_IDLE(ordered_store, current_pos, STATE);
             break;
 
         case GO_UP:
+            // The GO_UP state goes up until it reaches ordered floor or another order in the same direction.
             printf("State = GO_UP \n");
-            elevio_floorIndicator(get_floor_to_indicate(last_pos));
-            if(ordered_store == current_pos){
-                elevio_motorDirection(DIRN_STOP);
-                motor_direction = DIRN_STOP;
-                elevio_floorIndicator(get_floor_to_indicate(current_pos));
-                STATE = OPEN_DOOR;
-            }
-            else if((current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40)){
-                if(current_pos == 20 && (orders[2] != 0 || orders[4] != 0)){
-                    elevio_motorDirection(DIRN_STOP);
-                    motor_direction = DIRN_STOP;
-                    elevio_floorIndicator(get_floor_to_indicate(current_pos));
-                    STATE = OPEN_DOOR;
-                }
-                else if(current_pos == 30 && (orders[5] != 0 || orders[7] != 0)){
-                    elevio_motorDirection(DIRN_STOP);
-                    motor_direction = DIRN_STOP;
-                    elevio_floorIndicator(get_floor_to_indicate(current_pos));
-                    STATE = OPEN_DOOR;
-                }
-                else{
-                    elevio_motorDirection(DIRN_UP);
-                    motor_direction = DIRN_UP;
-                }
-            }
-            else{
-                elevio_motorDirection(DIRN_UP);
-                motor_direction = DIRN_UP;
-            }
-            
+            STATE = states_GO_UP(ordered_store, current_pos, orders[2], orders[4], orders[5], orders[7], last_pos, &motor_direction, STATE);
             break;
 
         case GO_DOWN:
             printf("State = GO_DOWN \n");
-            elevio_floorIndicator(get_floor_to_indicate(last_pos));
-            if(ordered_store == current_pos){
-                elevio_motorDirection(DIRN_STOP);
-                motor_direction = DIRN_STOP;
-                elevio_floorIndicator(get_floor_to_indicate(current_pos));
-                STATE = OPEN_DOOR;
-            }
-            else if((current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40)){
-                if(current_pos == 20 && (orders[3] != 0 || orders[4] != 0)){
-                    elevio_motorDirection(DIRN_STOP);
-                    motor_direction = DIRN_STOP;
-                    elevio_floorIndicator(get_floor_to_indicate(current_pos));
-                    STATE = OPEN_DOOR;
-                }
-                else if(current_pos == 30 && (orders[6] != 0 || orders[7] != 0)){
-                    elevio_motorDirection(DIRN_STOP);
-                    motor_direction = DIRN_STOP;
-                    elevio_floorIndicator(get_floor_to_indicate(current_pos));
-                    STATE = OPEN_DOOR;
-                }
-                else{
-                    elevio_motorDirection(DIRN_DOWN);
-                    motor_direction = DIRN_DOWN;
-                }
-            }
-            else{
-                elevio_motorDirection(DIRN_DOWN);
-                motor_direction = DIRN_DOWN;
-            }
-            
-            
+            STATE = states_GO_DOWN(ordered_store, current_pos, orders[3], orders[4], orders[6], orders[7], last_pos, &motor_direction, STATE);
             break;
 
         case OPEN_DOOR:
