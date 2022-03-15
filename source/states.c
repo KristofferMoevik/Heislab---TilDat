@@ -41,6 +41,12 @@ enum Motor_direction {
 };
 
 
+void states_start_elevator(){
+    elevio_init();
+    return;
+}
+
+
 int64_t states_get_floor_to_indicate(int64_t last_floor){
     return (last_floor / 10) - 1;
 }

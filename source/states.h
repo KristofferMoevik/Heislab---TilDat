@@ -6,6 +6,12 @@
 * @brief A library for the finite state machine in main.c
 */
 
+/**
+* @brief Starts the elevator
+*
+* @return void
+*/
+void states_start_elevator();
 
 /**
 * @brief Drives the elevator to the floor underneat when the elevator starts

@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <time.h>
 #include <inttypes.h>
+#include "driver/elevio.h"
 #include "pos_and_dir.h"
 
 int64_t pos_and_dir_get_current_pos(int64_t current_pos, int64_t motor_direction, int64_t floor_sensor, int64_t last_pos, int64_t last_motor_direction){
@@ -55,4 +56,6 @@ int64_t pos_and_dir_get_need_for_initializing(int64_t floor_sensor, int64_t last
     return STATE;
 }
 
-
+int64_t pos_and_dir_get_floor_sensor(){
+    return (elevio_floorSensor() + 1) * 10;
+}

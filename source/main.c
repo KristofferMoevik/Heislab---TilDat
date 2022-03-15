@@ -6,10 +6,14 @@
 #include <stdint.h>
 #include <time.h>
 #include <inttypes.h>
-#include "driver/elevio.h"
 #include "inputs_and_orders.h"
 #include "pos_and_dir.h"
 #include "states.h"
+
+/**
+* @file
+* @brief A program for running the elevator at the elevator lab.
+*/
 
 enum Current_pos {
     UNDEFINED = -10,
@@ -43,7 +47,7 @@ enum Motor_direction {
 
 
 int main(){
-    elevio_init();
+    
     int64_t STATE = INIT_STATE;
     int64_t inputs[] = {0,0,0,0,0,0,0,0,0,0,0,0};
     int64_t orders[] = {0,0,0,0,0,0,0,0,0,0,0,0};
@@ -58,7 +62,8 @@ int main(){
     double clock_time;
     int64_t stop = 0;
     int64_t obstruction = 0;
-
+    
+    states_start_elevator();
 
     while(1){
        
@@ -68,7 +73,7 @@ int main(){
         
         ordered_store = inputs_and_orders_get_target_floor(orders, ordered_store);
         
-        floor_sensor = (elevio_floorSensor() + 1) * 10; 
+        floor_sensor = pos_and_dir_get_floor_sensor(); 
 
         current_pos = pos_and_dir_get_current_pos(current_pos, motor_direction, floor_sensor, last_pos, last_motor_direction); 
 

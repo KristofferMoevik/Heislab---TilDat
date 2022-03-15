@@ -61,3 +61,10 @@ int64_t pos_and_dir_get_last_motor_direction(int64_t motor_direction, int64_t la
 * @return @p STATE the state of the finite state machine of the elevator.
 */
 int64_t pos_and_dir_get_need_for_initializing(int64_t floor_sensor, int64_t last_pos, int64_t motor_direction, int64_t last_motor_direction, int64_t STATE);
+
+/**
+* @brief Get the current floor of the elevator.
+*
+* @return the position of the elevator based on sensor data. returns value 10, 20, 30 or 40
+*/
+int64_t pos_and_dir_get_floor_sensor();
