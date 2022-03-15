@@ -6,30 +6,6 @@
 * @brief A library for the finite state machine in main.c
 */
 
-enum Current_pos {
-    UNDEFINED = -10,
-    STORY_1 = 10, 
-    BETWEEN_1_2 = 15,
-    STORY_2 = 20,
-    BETWEEN_2_3 = 25,
-    STORY_3 = 30,
-    BEETWEEN_3_4 = 35,
-    STORY_4 = 40,
-}; 
-
-enum States {
-    INIT_STATE = 0,
-    IDLE = 1,
-    GO_UP = 2,
-    GO_DOWN = 3,
-    OPEN_DOOR = 4,
-    CLOSE_DOOR = 5,
-    WAIT = 6,
-    STOP = 7,
-    WAIT_STOP = 8,
-    OPEN_DOORS_STOP = 9,
-};
-
 
 /**
 * @brief Drives the elevator to the floor underneat when the elevator starts
@@ -95,7 +71,7 @@ int64_t states_OPEN_DOOR(int64_t STATE, double *timer, int64_t current_pos);
 /**
 * @brief Waits for 3 seconds and then sets STATE to CLOSE_DOOR. If there is a obstruction the function waits 3 seconds after the obstruction is gone before it sets STATE to CLOSE_DOOR
 *
-* @param[in] obstruction time when @p STATE was set to OPEN_DOOR
+* @param[in] obstruction tells if there are a obstruction hindering the doors from closing
 * @param[in] timer time when @p STATE was set to WAIT
 * @param[in] clock_time the clock time rigth now
 * @param[in] time_elapsed the time since th WAIT state was called
@@ -109,7 +85,7 @@ int64_t states_WAIT(int64_t obstruction, double *timer, double *clock_time, doub
 /**
 * @brief Closes door if there is no obstruction. And empties orders in the store.
 *
-* @param[in] obstruction time when @p STATE was set to OPEN_DOOR
+* @param[in] obstruction tells if there are a obstruction hindering the doors from closing
 * @param[in] stop tells if the stop button is pushed. If pushed stop = 1, else stop = 0.
 * @param[in] current_pos value of the position of the elevator. Has values [10, 15, 20, 25, 30, 35, 40]
 * @param[in] orders array of orders. The elements represent the buttons in the stores and the cab. The value of the elements are a time stamp.

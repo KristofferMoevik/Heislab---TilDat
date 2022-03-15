@@ -6,9 +6,39 @@
 #include <stdint.h>
 #include <time.h>
 #include <inttypes.h>
-#include "order_sorting.h"
+#include "inputs_and_orders.h"
 #include "states.h"
 #include "driver/elevio.h"
+
+enum Current_pos {
+    UNDEFINED = -10,
+    STORY_1 = 10, 
+    BETWEEN_1_2 = 15,
+    STORY_2 = 20,
+    BETWEEN_2_3 = 25,
+    STORY_3 = 30,
+    BEETWEEN_3_4 = 35,
+    STORY_4 = 40,
+}; 
+
+enum States {
+    INIT_STATE = 0,
+    IDLE = 1,
+    GO_UP = 2,
+    GO_DOWN = 3,
+    OPEN_DOOR = 4,
+    CLOSE_DOOR = 5,
+    WAIT = 6,
+    STOP = 7,
+    WAIT_STOP = 8,
+    OPEN_DOORS_STOP = 9,
+};
+
+enum Motor_direction {
+    DOWN = -1,
+    STILL = 0,
+    UP = 1,
+};
 
 
 int64_t states_get_floor_to_indicate(int64_t last_floor){
