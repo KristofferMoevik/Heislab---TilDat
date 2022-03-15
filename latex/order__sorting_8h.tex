@@ -1,0 +1,59 @@
+\hypertarget{order__sorting_8h}{}\doxysection{source/order\+\_\+sorting.h File Reference}
+\label{order__sorting_8h}\index{source/order\_sorting.h@{source/order\_sorting.h}}
+
+
+A simple library for prioritizing which floor to go first.  
+
+
+{\ttfamily \#include $<$inttypes.\+h$>$}\newline
+Include dependency graph for order\+\_\+sorting.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=205pt]{order__sorting_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{order__sorting_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{order__sorting_8h_ae6b512a461eb68988c9b6adaefe0e031}{order\+\_\+sorting\+\_\+get\+\_\+target\+\_\+floor}} (int64\+\_\+t orders\mbox{[}$\,$\mbox{]}, int64\+\_\+t ordered\+\_\+store)
+\begin{DoxyCompactList}\small\item\em Get all the orders and return the floor to go to based on when the order was placed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A simple library for prioritizing which floor to go first. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{order__sorting_8h_ae6b512a461eb68988c9b6adaefe0e031}\label{order__sorting_8h_ae6b512a461eb68988c9b6adaefe0e031}} 
+\index{order\_sorting.h@{order\_sorting.h}!order\_sorting\_get\_target\_floor@{order\_sorting\_get\_target\_floor}}
+\index{order\_sorting\_get\_target\_floor@{order\_sorting\_get\_target\_floor}!order\_sorting.h@{order\_sorting.h}}
+\doxysubsubsection{\texorpdfstring{order\_sorting\_get\_target\_floor()}{order\_sorting\_get\_target\_floor()}}
+{\footnotesize\ttfamily int order\+\_\+sorting\+\_\+get\+\_\+target\+\_\+floor (\begin{DoxyParamCaption}\item[{int64\+\_\+t}]{orders\mbox{[}$\,$\mbox{]},  }\item[{int64\+\_\+t}]{ordered\+\_\+store }\end{DoxyParamCaption})}
+
+
+
+Get all the orders and return the floor to go to based on when the order was placed. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em orders} & Array of orders with values of when the ordr was placed. Is a array of size 12 \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em ordered\+\_\+store} & value of the ordered store.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily ordered\+\_\+store}, is one of the values 0, 10, 20, 30, 40 
+\end{DoxyReturn}
+
+
+Definition at line 12 of file order\+\_\+sorting.\+c.
+

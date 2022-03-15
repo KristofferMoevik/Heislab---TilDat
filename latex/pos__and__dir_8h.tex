@@ -1,0 +1,149 @@
+\hypertarget{pos__and__dir_8h}{}\doxysection{source/pos\+\_\+and\+\_\+dir.h File Reference}
+\label{pos__and__dir_8h}\index{source/pos\_and\_dir.h@{source/pos\_and\_dir.h}}
+
+
+A library for getting position, direction and need for initializing.  
+
+
+{\ttfamily \#include $<$inttypes.\+h$>$}\newline
+Include dependency graph for pos\+\_\+and\+\_\+dir.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{pos__and__dir_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=302pt]{pos__and__dir_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int64\+\_\+t \mbox{\hyperlink{pos__and__dir_8h_aaa23ac49e06b62dba4fcd516f07072e3}{pos\+\_\+and\+\_\+dir\+\_\+get\+\_\+current\+\_\+pos}} (int64\+\_\+t current\+\_\+pos, int64\+\_\+t motor\+\_\+direction, int64\+\_\+t floor\+\_\+sensor, int64\+\_\+t last\+\_\+pos, int64\+\_\+t last\+\_\+motor\+\_\+direction)
+\begin{DoxyCompactList}\small\item\em Get the current floor of the elevator. \end{DoxyCompactList}\item 
+int64\+\_\+t \mbox{\hyperlink{pos__and__dir_8h_a666b1e1d38059f4f4c2ca8090c81f679}{pos\+\_\+and\+\_\+dir\+\_\+get\+\_\+last\+\_\+pos}} (int64\+\_\+t current\+\_\+pos, int64\+\_\+t last\+\_\+pos)
+\begin{DoxyCompactList}\small\item\em Get the last known position of the elevator. \end{DoxyCompactList}\item 
+int64\+\_\+t \mbox{\hyperlink{pos__and__dir_8h_a325ba98fb20aff7e0dc211a365f49a22}{pos\+\_\+and\+\_\+dir\+\_\+get\+\_\+last\+\_\+motor\+\_\+direction}} (int64\+\_\+t motor\+\_\+direction, int64\+\_\+t last\+\_\+motor\+\_\+direction)
+\begin{DoxyCompactList}\small\item\em Get the last motor direction. \end{DoxyCompactList}\item 
+int64\+\_\+t \mbox{\hyperlink{pos__and__dir_8h_a8227bcde7d226c1c7b7929df86ffe261}{pos\+\_\+and\+\_\+dir\+\_\+get\+\_\+need\+\_\+for\+\_\+initializing}} (int64\+\_\+t floor\+\_\+sensor, int64\+\_\+t last\+\_\+pos, int64\+\_\+t motor\+\_\+direction, int64\+\_\+t last\+\_\+motor\+\_\+direction, int64\+\_\+t STATE)
+\begin{DoxyCompactList}\small\item\em Get the current floor of the elevator. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A library for getting position, direction and need for initializing. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{pos__and__dir_8h_aaa23ac49e06b62dba4fcd516f07072e3}\label{pos__and__dir_8h_aaa23ac49e06b62dba4fcd516f07072e3}} 
+\index{pos\_and\_dir.h@{pos\_and\_dir.h}!pos\_and\_dir\_get\_current\_pos@{pos\_and\_dir\_get\_current\_pos}}
+\index{pos\_and\_dir\_get\_current\_pos@{pos\_and\_dir\_get\_current\_pos}!pos\_and\_dir.h@{pos\_and\_dir.h}}
+\doxysubsubsection{\texorpdfstring{pos\_and\_dir\_get\_current\_pos()}{pos\_and\_dir\_get\_current\_pos()}}
+{\footnotesize\ttfamily int64\+\_\+t pos\+\_\+and\+\_\+dir\+\_\+get\+\_\+current\+\_\+pos (\begin{DoxyParamCaption}\item[{int64\+\_\+t}]{current\+\_\+pos,  }\item[{int64\+\_\+t}]{motor\+\_\+direction,  }\item[{int64\+\_\+t}]{floor\+\_\+sensor,  }\item[{int64\+\_\+t}]{last\+\_\+pos,  }\item[{int64\+\_\+t}]{last\+\_\+motor\+\_\+direction }\end{DoxyParamCaption})}
+
+
+
+Get the current floor of the elevator. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in,out}}  & {\em current\+\_\+pos} & value of the position of the elevator. Has values \mbox{[}10, 15, 20, 25, 30, 35, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in}}  & {\em motor\+\_\+direction} & value of the motor\+\_\+direction. Has values \mbox{[}-\/1, 0, 1\mbox{]} \\
+\hline
+\mbox{\texttt{ in}}  & {\em floor\+\_\+sensor} & value of the sensor reading from the elevator. Has values \mbox{[}0, 10, 20, 30, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in}}  & {\em last\+\_\+pos} & value of the last known position based on the sensors. Has values \mbox{[}10, 20, 30, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in}}  & {\em last\+\_\+motor\+\_\+direction} & value of the ordered store. Has values \mbox{[}-\/1, 1\mbox{]}\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily current\+\_\+pos} value of the position of the elevator. Has values \mbox{[}10, 15, 20, 25, 30, 35, 40\mbox{]} 
+\end{DoxyReturn}
+
+
+Definition at line 11 of file pos\+\_\+and\+\_\+dir.\+c.
+
+\mbox{\Hypertarget{pos__and__dir_8h_a325ba98fb20aff7e0dc211a365f49a22}\label{pos__and__dir_8h_a325ba98fb20aff7e0dc211a365f49a22}} 
+\index{pos\_and\_dir.h@{pos\_and\_dir.h}!pos\_and\_dir\_get\_last\_motor\_direction@{pos\_and\_dir\_get\_last\_motor\_direction}}
+\index{pos\_and\_dir\_get\_last\_motor\_direction@{pos\_and\_dir\_get\_last\_motor\_direction}!pos\_and\_dir.h@{pos\_and\_dir.h}}
+\doxysubsubsection{\texorpdfstring{pos\_and\_dir\_get\_last\_motor\_direction()}{pos\_and\_dir\_get\_last\_motor\_direction()}}
+{\footnotesize\ttfamily int64\+\_\+t pos\+\_\+and\+\_\+dir\+\_\+get\+\_\+last\+\_\+motor\+\_\+direction (\begin{DoxyParamCaption}\item[{int64\+\_\+t}]{motor\+\_\+direction,  }\item[{int64\+\_\+t}]{last\+\_\+motor\+\_\+direction }\end{DoxyParamCaption})}
+
+
+
+Get the last motor direction. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em motor\+\_\+direction} & value of the motor\+\_\+direction. Has values \mbox{[}-\/1, 0, 1\mbox{]} \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em last\+\_\+motor\+\_\+direction} & value of the ordered store. Has values \mbox{[}-\/1, 1\mbox{]}\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily last\+\_\+motor\+\_\+direction} value of the ordered store. Has values \mbox{[}-\/1, 1\mbox{]} 
+\end{DoxyReturn}
+
+
+Definition at line 43 of file pos\+\_\+and\+\_\+dir.\+c.
+
+\mbox{\Hypertarget{pos__and__dir_8h_a666b1e1d38059f4f4c2ca8090c81f679}\label{pos__and__dir_8h_a666b1e1d38059f4f4c2ca8090c81f679}} 
+\index{pos\_and\_dir.h@{pos\_and\_dir.h}!pos\_and\_dir\_get\_last\_pos@{pos\_and\_dir\_get\_last\_pos}}
+\index{pos\_and\_dir\_get\_last\_pos@{pos\_and\_dir\_get\_last\_pos}!pos\_and\_dir.h@{pos\_and\_dir.h}}
+\doxysubsubsection{\texorpdfstring{pos\_and\_dir\_get\_last\_pos()}{pos\_and\_dir\_get\_last\_pos()}}
+{\footnotesize\ttfamily int64\+\_\+t pos\+\_\+and\+\_\+dir\+\_\+get\+\_\+last\+\_\+pos (\begin{DoxyParamCaption}\item[{int64\+\_\+t}]{current\+\_\+pos,  }\item[{int64\+\_\+t}]{last\+\_\+pos }\end{DoxyParamCaption})}
+
+
+
+Get the last known position of the elevator. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em current\+\_\+pos} & value of the position of the elevator. Has values \mbox{[}10, 15, 20, 25, 30, 35, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em last\+\_\+pos} & value of the last known position based on the sensors. Has values \mbox{[}10, 20, 30, 40\mbox{]}\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily last\+\_\+pos} value of the last known position based on the sensors. Has values \mbox{[}10, 20, 30, 40\mbox{]} 
+\end{DoxyReturn}
+
+
+Definition at line 36 of file pos\+\_\+and\+\_\+dir.\+c.
+
+\mbox{\Hypertarget{pos__and__dir_8h_a8227bcde7d226c1c7b7929df86ffe261}\label{pos__and__dir_8h_a8227bcde7d226c1c7b7929df86ffe261}} 
+\index{pos\_and\_dir.h@{pos\_and\_dir.h}!pos\_and\_dir\_get\_need\_for\_initializing@{pos\_and\_dir\_get\_need\_for\_initializing}}
+\index{pos\_and\_dir\_get\_need\_for\_initializing@{pos\_and\_dir\_get\_need\_for\_initializing}!pos\_and\_dir.h@{pos\_and\_dir.h}}
+\doxysubsubsection{\texorpdfstring{pos\_and\_dir\_get\_need\_for\_initializing()}{pos\_and\_dir\_get\_need\_for\_initializing()}}
+{\footnotesize\ttfamily int64\+\_\+t pos\+\_\+and\+\_\+dir\+\_\+get\+\_\+need\+\_\+for\+\_\+initializing (\begin{DoxyParamCaption}\item[{int64\+\_\+t}]{floor\+\_\+sensor,  }\item[{int64\+\_\+t}]{last\+\_\+pos,  }\item[{int64\+\_\+t}]{motor\+\_\+direction,  }\item[{int64\+\_\+t}]{last\+\_\+motor\+\_\+direction,  }\item[{int64\+\_\+t}]{STATE }\end{DoxyParamCaption})}
+
+
+
+Get the current floor of the elevator. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em floor\+\_\+sensor} & value of the sensor reading from the elevator. Has values \mbox{[}0, 10, 20, 30, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in}}  & {\em last\+\_\+pos} & value of the last known position based on the sensors. Has values \mbox{[}10, 20, 30, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in}}  & {\em motor\+\_\+direction} & value of the motor\+\_\+direction. Has values \mbox{[}-\/1, 0, 1\mbox{]} \\
+\hline
+\mbox{\texttt{ in}}  & {\em last\+\_\+motor\+\_\+direction} & value of the ordered store. Has values \mbox{[}-\/1, 1\mbox{]} \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em STATE} & the state of the finite state machine of the elevator.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily STATE} the state of the finite state machine of the elevator. 
+\end{DoxyReturn}
+
+
+Definition at line 50 of file pos\+\_\+and\+\_\+dir.\+c.
+

@@ -1,0 +1,373 @@
+\hypertarget{states_8h}{}\doxysection{source/states.h File Reference}
+\label{states_8h}\index{source/states.h@{source/states.h}}
+
+
+A library for the finite state machine in \mbox{\hyperlink{main_8c_source}{main.\+c}}.  
+
+
+{\ttfamily \#include $<$inttypes.\+h$>$}\newline
+Include dependency graph for states.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=171pt]{states_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=274pt]{states_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{states_8h_a039fa103cf4112a66fb74d44ac7d9002}\label{states_8h_a039fa103cf4112a66fb74d44ac7d9002}} 
+enum {\bfseries Current\+\_\+pos} \{ \newline
+{\bfseries UNDEFINED} = -\/10
+, {\bfseries STORY\+\_\+1} = 10
+, {\bfseries BETWEEN\+\_\+1\+\_\+2} = 15
+, {\bfseries STORY\+\_\+2} = 20
+, \newline
+{\bfseries BETWEEN\+\_\+2\+\_\+3} = 25
+, {\bfseries STORY\+\_\+3} = 30
+, {\bfseries BEETWEEN\+\_\+3\+\_\+4} = 35
+, {\bfseries STORY\+\_\+4} = 40
+ \}
+\item 
+\mbox{\Hypertarget{states_8h_a808e5cd4979462d3bbe3070d7d147444}\label{states_8h_a808e5cd4979462d3bbe3070d7d147444}} 
+enum {\bfseries States} \{ \newline
+{\bfseries INIT\+\_\+\+STATE} = 0
+, {\bfseries IDLE} = 1
+, {\bfseries GO\+\_\+\+UP} = 2
+, {\bfseries GO\+\_\+\+DOWN} = 3
+, \newline
+{\bfseries OPEN\+\_\+\+DOOR} = 4
+, {\bfseries CLOSE\+\_\+\+DOOR} = 5
+, {\bfseries WAIT} = 6
+, {\bfseries STOP} = 7
+, \newline
+{\bfseries WAIT\+\_\+\+STOP} = 8
+, {\bfseries OPEN\+\_\+\+DOORS\+\_\+\+STOP} = 9
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int64\+\_\+t \mbox{\hyperlink{states_8h_a77e7a942f74c3a81bd9f7722c6f811f4}{states\+\_\+\+INIT\+\_\+\+STATE}} (int64\+\_\+t current\+\_\+pos, int64\+\_\+t $\ast$motor\+\_\+direction, int64\+\_\+t STATE)
+\begin{DoxyCompactList}\small\item\em Drives the elevator to the floor underneat when the elevator starts. \end{DoxyCompactList}\item 
+int64\+\_\+t \mbox{\hyperlink{states_8h_ae95fe83c753526882d850728aa3fe6cf}{states\+\_\+\+IDLE}} (int64\+\_\+t ordered\+\_\+store, int64\+\_\+t current\+\_\+pos, int64\+\_\+t STATE)
+\begin{DoxyCompactList}\small\item\em If there is no orders the elevator waits. If there are orders the state returned is either OPEN\+\_\+\+DOOR, GO\+\_\+\+UP or GO\+\_\+\+DOWN. \end{DoxyCompactList}\item 
+int64\+\_\+t \mbox{\hyperlink{states_8h_a32f61820a03cb92a080505e2e443622c}{states\+\_\+\+GO\+\_\+\+UP}} (int64\+\_\+t ordered\+\_\+store, int64\+\_\+t current\+\_\+pos, int64\+\_\+t $\ast$orders, int64\+\_\+t last\+\_\+pos, int64\+\_\+t $\ast$motor\+\_\+direction, int64\+\_\+t STATE)
+\begin{DoxyCompactList}\small\item\em Drives the elevator up and stops on the way if there are orders between current store and ordered store. \end{DoxyCompactList}\item 
+int64\+\_\+t \mbox{\hyperlink{states_8h_ac81754b28cbb26200c586fc35b5599f6}{states\+\_\+\+GO\+\_\+\+DOWN}} (int64\+\_\+t ordered\+\_\+store, int64\+\_\+t current\+\_\+pos, int64\+\_\+t $\ast$orders, int64\+\_\+t last\+\_\+pos, int64\+\_\+t $\ast$motor\+\_\+direction, int64\+\_\+t STATE)
+\begin{DoxyCompactList}\small\item\em Drives the elevator down and stops on the way if there are orders between current store and ordered store. \end{DoxyCompactList}\item 
+int64\+\_\+t \mbox{\hyperlink{states_8h_ad99f71657629136b4ba4fa6b6c4f6f2a}{states\+\_\+\+OPEN\+\_\+\+DOOR}} (int64\+\_\+t STATE, double $\ast$timer, int64\+\_\+t current\+\_\+pos)
+\begin{DoxyCompactList}\small\item\em Opens the door of the elevator and turn the ligths of the current store off. \end{DoxyCompactList}\item 
+int64\+\_\+t \mbox{\hyperlink{states_8h_af36d88a188a6304b4f415c5d6feb5786}{states\+\_\+\+WAIT}} (int64\+\_\+t obstruction, double $\ast$timer, double $\ast$clock\+\_\+time, double $\ast$time\+\_\+elapsed, int64\+\_\+t current\+\_\+pos, int64\+\_\+t STATE)
+\begin{DoxyCompactList}\small\item\em Waits for 3 seconds and then sets STATE to CLOSE\+\_\+\+DOOR. If there is a obstruction the function waits 3 seconds after the obstruction is gone before it sets STATE to CLOSE\+\_\+\+DOOR. \end{DoxyCompactList}\item 
+int64\+\_\+t \mbox{\hyperlink{states_8h_a424f8cd4a8b30b038b1721ae97337d2f}{states\+\_\+\+CLOSE\+\_\+\+DOOR}} (int64\+\_\+t obstruction, int64\+\_\+t stop, int64\+\_\+t current\+\_\+pos, int64\+\_\+t $\ast$orders, int64\+\_\+t $\ast$ordered\+\_\+store, int64\+\_\+t STATE)
+\begin{DoxyCompactList}\small\item\em Closes door if there is no obstruction. And empties orders in the store. \end{DoxyCompactList}\item 
+int64\+\_\+t \mbox{\hyperlink{states_8h_aec2dacaf6ab4fd0fc45c1ff058ee8eef}{states\+\_\+\+STOP}} (int64\+\_\+t stop, int64\+\_\+t $\ast$motor\+\_\+direction, int64\+\_\+t $\ast$orders, int64\+\_\+t $\ast$ordered\+\_\+store, int64\+\_\+t current\+\_\+pos, int64\+\_\+t STATE)
+\begin{DoxyCompactList}\small\item\em Stops the elevator and clears order list. \end{DoxyCompactList}\item 
+int64\+\_\+t \mbox{\hyperlink{states_8h_ab4137e7af3d02aa75be98f2fa534366e}{states\+\_\+\+WAIT\+\_\+\+STOP}} (int64\+\_\+t ordered\+\_\+store, int64\+\_\+t current\+\_\+pos, int64\+\_\+t STATE)
+\begin{DoxyCompactList}\small\item\em Waits for new order. \end{DoxyCompactList}\item 
+int64\+\_\+t \mbox{\hyperlink{states_8h_aae25682ba1ab8593559be6dc81cd572d}{states\+\_\+\+OPEN\+\_\+\+DOOR\+\_\+\+STOP}} (double $\ast$timer, int64\+\_\+t STATE)
+\begin{DoxyCompactList}\small\item\em Waits for new order. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A library for the finite state machine in \mbox{\hyperlink{main_8c_source}{main.\+c}}. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{states_8h_a424f8cd4a8b30b038b1721ae97337d2f}\label{states_8h_a424f8cd4a8b30b038b1721ae97337d2f}} 
+\index{states.h@{states.h}!states\_CLOSE\_DOOR@{states\_CLOSE\_DOOR}}
+\index{states\_CLOSE\_DOOR@{states\_CLOSE\_DOOR}!states.h@{states.h}}
+\doxysubsubsection{\texorpdfstring{states\_CLOSE\_DOOR()}{states\_CLOSE\_DOOR()}}
+{\footnotesize\ttfamily int64\+\_\+t states\+\_\+\+CLOSE\+\_\+\+DOOR (\begin{DoxyParamCaption}\item[{int64\+\_\+t}]{obstruction,  }\item[{int64\+\_\+t}]{stop,  }\item[{int64\+\_\+t}]{current\+\_\+pos,  }\item[{int64\+\_\+t $\ast$}]{orders,  }\item[{int64\+\_\+t $\ast$}]{ordered\+\_\+store,  }\item[{int64\+\_\+t}]{STATE }\end{DoxyParamCaption})}
+
+
+
+Closes door if there is no obstruction. And empties orders in the store. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em obstruction} & time when {\ttfamily STATE} was set to OPEN\+\_\+\+DOOR \\
+\hline
+\mbox{\texttt{ in}}  & {\em stop} & tells if the stop button is pushed. If pushed stop = 1, else stop = 0. \\
+\hline
+\mbox{\texttt{ in}}  & {\em current\+\_\+pos} & value of the position of the elevator. Has values \mbox{[}10, 15, 20, 25, 30, 35, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in}}  & {\em orders} & array of orders. The elements represent the buttons in the stores and the cab. The value of the elements are a time stamp. \\
+\hline
+\mbox{\texttt{ in}}  & {\em ordered\+\_\+store} & value of the ordered store. \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em STATE} & state of the finite state machine. Has value 0, 1, 2, 3, 4, 5, 6, 7, 8 or 9 of type STATE\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily STATE} state of the finite state machine. Has value CLOSE\+\_\+\+DOOR or WAIT 
+\end{DoxyReturn}
+
+
+Definition at line 162 of file states.\+c.
+
+\mbox{\Hypertarget{states_8h_ac81754b28cbb26200c586fc35b5599f6}\label{states_8h_ac81754b28cbb26200c586fc35b5599f6}} 
+\index{states.h@{states.h}!states\_GO\_DOWN@{states\_GO\_DOWN}}
+\index{states\_GO\_DOWN@{states\_GO\_DOWN}!states.h@{states.h}}
+\doxysubsubsection{\texorpdfstring{states\_GO\_DOWN()}{states\_GO\_DOWN()}}
+{\footnotesize\ttfamily int64\+\_\+t states\+\_\+\+GO\+\_\+\+DOWN (\begin{DoxyParamCaption}\item[{int64\+\_\+t}]{ordered\+\_\+store,  }\item[{int64\+\_\+t}]{current\+\_\+pos,  }\item[{int64\+\_\+t $\ast$}]{orders,  }\item[{int64\+\_\+t}]{last\+\_\+pos,  }\item[{int64\+\_\+t $\ast$}]{motor\+\_\+direction,  }\item[{int64\+\_\+t}]{STATE }\end{DoxyParamCaption})}
+
+
+
+Drives the elevator down and stops on the way if there are orders between current store and ordered store. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em ordered\+\_\+store} & value of the ordered store. \\
+\hline
+\mbox{\texttt{ in}}  & {\em current\+\_\+pos} & value of the position of the elevator. Has values \mbox{[}10, 15, 20, 25, 30, 35, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in}}  & {\em orders} & array of orders. The elements represent the buttons in the stores and the cab. The value of the elements are a time stamp. \\
+\hline
+\mbox{\texttt{ in}}  & {\em last\+\_\+pos} & value of the last known position based on the sensors. Has values \mbox{[}10, 20, 30, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em motor\+\_\+direction} & value of the motor\+\_\+direction. Has values \mbox{[}-\/1, 0, 1\mbox{]} \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em STATE} & state of the finite state machine. Has value 0, 1, 2, 3, 4, 5, 6, 7, 8 or 9 of type STATE\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily STATE} state of the finite state machine. Has value OPEN\+\_\+\+DOOR or GO\+\_\+\+DOWN 
+\end{DoxyReturn}
+
+
+Definition at line 89 of file states.\+c.
+
+\mbox{\Hypertarget{states_8h_a32f61820a03cb92a080505e2e443622c}\label{states_8h_a32f61820a03cb92a080505e2e443622c}} 
+\index{states.h@{states.h}!states\_GO\_UP@{states\_GO\_UP}}
+\index{states\_GO\_UP@{states\_GO\_UP}!states.h@{states.h}}
+\doxysubsubsection{\texorpdfstring{states\_GO\_UP()}{states\_GO\_UP()}}
+{\footnotesize\ttfamily int64\+\_\+t states\+\_\+\+GO\+\_\+\+UP (\begin{DoxyParamCaption}\item[{int64\+\_\+t}]{ordered\+\_\+store,  }\item[{int64\+\_\+t}]{current\+\_\+pos,  }\item[{int64\+\_\+t $\ast$}]{orders,  }\item[{int64\+\_\+t}]{last\+\_\+pos,  }\item[{int64\+\_\+t $\ast$}]{motor\+\_\+direction,  }\item[{int64\+\_\+t}]{STATE }\end{DoxyParamCaption})}
+
+
+
+Drives the elevator up and stops on the way if there are orders between current store and ordered store. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em ordered\+\_\+store} & value of the ordered store. \\
+\hline
+\mbox{\texttt{ in}}  & {\em current\+\_\+pos} & value of the position of the elevator. Has values \mbox{[}10, 15, 20, 25, 30, 35, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in}}  & {\em orders} & array of orders. The elements represent the buttons in the stores and the cab. The value of the elements are a time stamp. \\
+\hline
+\mbox{\texttt{ in}}  & {\em last\+\_\+pos} & value of the last known position based on the sensors. Has values \mbox{[}10, 20, 30, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em motor\+\_\+direction} & value of the motor\+\_\+direction. Has values \mbox{[}-\/1, 0, 1\mbox{]} \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em STATE} & state of the finite state machine. Has value 0, 1, 2, 3, 4, 5, 6, 7, 8 or 9 of type STATE\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily STATE} state of the finite state machine. Has value OPEN\+\_\+\+DOOR or GO\+\_\+\+UP 
+\end{DoxyReturn}
+
+
+Definition at line 49 of file states.\+c.
+
+\mbox{\Hypertarget{states_8h_ae95fe83c753526882d850728aa3fe6cf}\label{states_8h_ae95fe83c753526882d850728aa3fe6cf}} 
+\index{states.h@{states.h}!states\_IDLE@{states\_IDLE}}
+\index{states\_IDLE@{states\_IDLE}!states.h@{states.h}}
+\doxysubsubsection{\texorpdfstring{states\_IDLE()}{states\_IDLE()}}
+{\footnotesize\ttfamily int64\+\_\+t states\+\_\+\+IDLE (\begin{DoxyParamCaption}\item[{int64\+\_\+t}]{ordered\+\_\+store,  }\item[{int64\+\_\+t}]{current\+\_\+pos,  }\item[{int64\+\_\+t}]{STATE }\end{DoxyParamCaption})}
+
+
+
+If there is no orders the elevator waits. If there are orders the state returned is either OPEN\+\_\+\+DOOR, GO\+\_\+\+UP or GO\+\_\+\+DOWN. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em ordered\+\_\+store} & value of the ordered store. \\
+\hline
+\mbox{\texttt{ in}}  & {\em current\+\_\+pos} & value of the position of the elevator. Has values \mbox{[}10, 15, 20, 25, 30, 35, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em STATE} & state of the finite state machine. Has value 0, 1, 2, 3, 4, 5, 6, 7, 8 or 9 of type STATE\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily STATE} state of the finite state machine. Has value OPEN\+\_\+\+DOOR, GO\+\_\+\+UP, GO\+\_\+\+DOWN or IDLE 
+\end{DoxyReturn}
+
+
+Definition at line 35 of file states.\+c.
+
+\mbox{\Hypertarget{states_8h_a77e7a942f74c3a81bd9f7722c6f811f4}\label{states_8h_a77e7a942f74c3a81bd9f7722c6f811f4}} 
+\index{states.h@{states.h}!states\_INIT\_STATE@{states\_INIT\_STATE}}
+\index{states\_INIT\_STATE@{states\_INIT\_STATE}!states.h@{states.h}}
+\doxysubsubsection{\texorpdfstring{states\_INIT\_STATE()}{states\_INIT\_STATE()}}
+{\footnotesize\ttfamily int64\+\_\+t states\+\_\+\+INIT\+\_\+\+STATE (\begin{DoxyParamCaption}\item[{int64\+\_\+t}]{current\+\_\+pos,  }\item[{int64\+\_\+t $\ast$}]{motor\+\_\+direction,  }\item[{int64\+\_\+t}]{STATE }\end{DoxyParamCaption})}
+
+
+
+Drives the elevator to the floor underneat when the elevator starts. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em current\+\_\+pos} & value of the position of the elevator. Has values \mbox{[}10, 15, 20, 25, 30, 35, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em motor\+\_\+direction} & value of the motor\+\_\+direction. Has values \mbox{[}-\/1, 0, 1\mbox{]} \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em STATE} & state of the finite state machine. Has value 0, 1, 2, 3, 4, 5, 6, 7, 8 or 9 of type STATE\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily STATE} state of the finite state machine. Has value INIT\+\_\+\+STATE or IDLE 
+\end{DoxyReturn}
+
+
+Definition at line 19 of file states.\+c.
+
+\mbox{\Hypertarget{states_8h_ad99f71657629136b4ba4fa6b6c4f6f2a}\label{states_8h_ad99f71657629136b4ba4fa6b6c4f6f2a}} 
+\index{states.h@{states.h}!states\_OPEN\_DOOR@{states\_OPEN\_DOOR}}
+\index{states\_OPEN\_DOOR@{states\_OPEN\_DOOR}!states.h@{states.h}}
+\doxysubsubsection{\texorpdfstring{states\_OPEN\_DOOR()}{states\_OPEN\_DOOR()}}
+{\footnotesize\ttfamily int64\+\_\+t states\+\_\+\+OPEN\+\_\+\+DOOR (\begin{DoxyParamCaption}\item[{int64\+\_\+t}]{STATE,  }\item[{double $\ast$}]{timer,  }\item[{int64\+\_\+t}]{current\+\_\+pos }\end{DoxyParamCaption})}
+
+
+
+Opens the door of the elevator and turn the ligths of the current store off. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em timer} & time when {\ttfamily STATE} was set to WAIT \\
+\hline
+\mbox{\texttt{ in}}  & {\em current\+\_\+pos} & value of the position of the elevator. Has values \mbox{[}10, 15, 20, 25, 30, 35, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em STATE} & state of the finite state machine. Has value 0, 1, 2, 3, 4, 5, 6, 7, 8 or 9 of type STATE\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily STATE} state of the finite state machine. Has value OPEN\+\_\+\+DOOR or WAIT 
+\end{DoxyReturn}
+
+
+Definition at line 129 of file states.\+c.
+
+\mbox{\Hypertarget{states_8h_aae25682ba1ab8593559be6dc81cd572d}\label{states_8h_aae25682ba1ab8593559be6dc81cd572d}} 
+\index{states.h@{states.h}!states\_OPEN\_DOOR\_STOP@{states\_OPEN\_DOOR\_STOP}}
+\index{states\_OPEN\_DOOR\_STOP@{states\_OPEN\_DOOR\_STOP}!states.h@{states.h}}
+\doxysubsubsection{\texorpdfstring{states\_OPEN\_DOOR\_STOP()}{states\_OPEN\_DOOR\_STOP()}}
+{\footnotesize\ttfamily int64\+\_\+t states\+\_\+\+OPEN\+\_\+\+DOOR\+\_\+\+STOP (\begin{DoxyParamCaption}\item[{double $\ast$}]{timer,  }\item[{int64\+\_\+t}]{STATE }\end{DoxyParamCaption})}
+
+
+
+Waits for new order. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em timer} & time when {\ttfamily STATE} was set to OPEN\+\_\+\+DOOR\+\_\+\+STOP \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em STATE} & state of the finite state machine. Has value 0, 1, 2, 3, 4, 5, 6, 7, 8 or 9 of type STATE\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily STATE} state of the finite state machine. Has value WAIT 
+\end{DoxyReturn}
+
+
+Definition at line 242 of file states.\+c.
+
+\mbox{\Hypertarget{states_8h_aec2dacaf6ab4fd0fc45c1ff058ee8eef}\label{states_8h_aec2dacaf6ab4fd0fc45c1ff058ee8eef}} 
+\index{states.h@{states.h}!states\_STOP@{states\_STOP}}
+\index{states\_STOP@{states\_STOP}!states.h@{states.h}}
+\doxysubsubsection{\texorpdfstring{states\_STOP()}{states\_STOP()}}
+{\footnotesize\ttfamily int64\+\_\+t states\+\_\+\+STOP (\begin{DoxyParamCaption}\item[{int64\+\_\+t}]{stop,  }\item[{int64\+\_\+t $\ast$}]{motor\+\_\+direction,  }\item[{int64\+\_\+t $\ast$}]{orders,  }\item[{int64\+\_\+t $\ast$}]{ordered\+\_\+store,  }\item[{int64\+\_\+t}]{current\+\_\+pos,  }\item[{int64\+\_\+t}]{STATE }\end{DoxyParamCaption})}
+
+
+
+Stops the elevator and clears order list. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em stop} & tells if the stop button is pushed. If pushed stop = 1, else stop = 0. \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em motor\+\_\+direction} & value of the motor\+\_\+direction. Has values \mbox{[}-\/1, 0, 1\mbox{]} \\
+\hline
+\mbox{\texttt{ in}}  & {\em orders} & array of orders. The elements represent the buttons in the stores and the cab. The value of the elements are a time stamp. \\
+\hline
+\mbox{\texttt{ in}}  & {\em ordered\+\_\+store} & value of the ordered store. \\
+\hline
+\mbox{\texttt{ in}}  & {\em current\+\_\+pos} & value of the position of the elevator. Has values \mbox{[}10, 15, 20, 25, 30, 35, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em STATE} & state of the finite state machine. Has value 0, 1, 2, 3, 4, 5, 6, 7, 8 or 9 of type STATE\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily STATE} state of the finite state machine. Has value WAIT\+\_\+\+STOP or OPEN\+\_\+\+DOOR\+\_\+\+STOP 
+\end{DoxyReturn}
+
+
+Definition at line 195 of file states.\+c.
+
+\mbox{\Hypertarget{states_8h_af36d88a188a6304b4f415c5d6feb5786}\label{states_8h_af36d88a188a6304b4f415c5d6feb5786}} 
+\index{states.h@{states.h}!states\_WAIT@{states\_WAIT}}
+\index{states\_WAIT@{states\_WAIT}!states.h@{states.h}}
+\doxysubsubsection{\texorpdfstring{states\_WAIT()}{states\_WAIT()}}
+{\footnotesize\ttfamily int64\+\_\+t states\+\_\+\+WAIT (\begin{DoxyParamCaption}\item[{int64\+\_\+t}]{obstruction,  }\item[{double $\ast$}]{timer,  }\item[{double $\ast$}]{clock\+\_\+time,  }\item[{double $\ast$}]{time\+\_\+elapsed,  }\item[{int64\+\_\+t}]{current\+\_\+pos,  }\item[{int64\+\_\+t}]{STATE }\end{DoxyParamCaption})}
+
+
+
+Waits for 3 seconds and then sets STATE to CLOSE\+\_\+\+DOOR. If there is a obstruction the function waits 3 seconds after the obstruction is gone before it sets STATE to CLOSE\+\_\+\+DOOR. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em obstruction} & time when {\ttfamily STATE} was set to OPEN\+\_\+\+DOOR \\
+\hline
+\mbox{\texttt{ in}}  & {\em timer} & time when {\ttfamily STATE} was set to WAIT \\
+\hline
+\mbox{\texttt{ in}}  & {\em clock\+\_\+time} & the clock time rigth now \\
+\hline
+\mbox{\texttt{ in}}  & {\em time\+\_\+elapsed} & the time since th WAIT state was called \\
+\hline
+\mbox{\texttt{ in}}  & {\em current\+\_\+pos} & value of the position of the elevator. Has values \mbox{[}10, 15, 20, 25, 30, 35, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em STATE} & state of the finite state machine. Has value 0, 1, 2, 3, 4, 5, 6, 7, 8 or 9 of type STATE\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily STATE} state of the finite state machine. Has value CLOSE\+\_\+\+DOOR or WAIT 
+\end{DoxyReturn}
+
+
+Definition at line 144 of file states.\+c.
+
+\mbox{\Hypertarget{states_8h_ab4137e7af3d02aa75be98f2fa534366e}\label{states_8h_ab4137e7af3d02aa75be98f2fa534366e}} 
+\index{states.h@{states.h}!states\_WAIT\_STOP@{states\_WAIT\_STOP}}
+\index{states\_WAIT\_STOP@{states\_WAIT\_STOP}!states.h@{states.h}}
+\doxysubsubsection{\texorpdfstring{states\_WAIT\_STOP()}{states\_WAIT\_STOP()}}
+{\footnotesize\ttfamily int64\+\_\+t states\+\_\+\+WAIT\+\_\+\+STOP (\begin{DoxyParamCaption}\item[{int64\+\_\+t}]{ordered\+\_\+store,  }\item[{int64\+\_\+t}]{current\+\_\+pos,  }\item[{int64\+\_\+t}]{STATE }\end{DoxyParamCaption})}
+
+
+
+Waits for new order. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em ordered\+\_\+store} & value of the ordered store. \\
+\hline
+\mbox{\texttt{ in}}  & {\em current\+\_\+pos} & value of the position of the elevator. Has values \mbox{[}10, 15, 20, 25, 30, 35, 40\mbox{]} \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em STATE} & state of the finite state machine. Has value 0, 1, 2, 3, 4, 5, 6, 7, 8 or 9 of type STATE\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily STATE} state of the finite state machine. Has value GO\+\_\+\+UP or GO\+\_\+\+DOWN 
+\end{DoxyReturn}
+
+
+Definition at line 225 of file states.\+c.
+

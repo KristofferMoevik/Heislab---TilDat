@@ -8,7 +8,7 @@
 /**
 * @brief Get all the orders and return the floor to go to based on when the order was placed
 *
-* @param[in] orders Array of orders with values of when the ordr was placed.
+* @param[in] orders Array of orders with values of when the ordr was placed. Is a array of size 12
 * @param[in, out] ordered_store value of the ordered store.
 *
 * @return @p ordered_store, is one of the values 0, 10, 20, 30, 40

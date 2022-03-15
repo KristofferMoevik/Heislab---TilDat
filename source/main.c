@@ -7,9 +7,9 @@
 #include <time.h>
 #include <inttypes.h>
 #include "driver/elevio.h"
-#include "utils/order_sorting.h"
-#include "utils/pos_and_dir.h"
-#include "utils/states.h"
+#include "order_sorting.h"
+#include "pos_and_dir.h"
+#include "states.h"
 
 enum Motor_direction {
     DOWN = -1,
@@ -101,11 +101,11 @@ int main(){
 
         case GO_UP:
             // The GO_UP state goes up until it reaches ordered floor or another order in the same direction.
-            STATE = states_GO_UP(ordered_store, current_pos, orders[2], orders[4], orders[5], orders[7], last_pos, &motor_direction, STATE);
+            STATE = states_GO_UP(ordered_store, current_pos, orders, last_pos, &motor_direction, STATE);
             break;
 
         case GO_DOWN:
-            STATE = states_GO_DOWN(ordered_store, current_pos, orders[3], orders[4], orders[6], orders[7], last_pos, &motor_direction, STATE);
+            STATE = states_GO_DOWN(ordered_store, current_pos, orders, last_pos, &motor_direction, STATE);
             break;
 
         case OPEN_DOOR:

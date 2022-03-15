@@ -8,7 +8,7 @@
 #include <inttypes.h>
 #include "order_sorting.h"
 #include "states.h"
-#include "../driver/elevio.h"
+#include "driver/elevio.h"
 
 
 int64_t states_get_floor_to_indicate(int64_t last_floor){
@@ -46,21 +46,26 @@ int64_t states_IDLE(int64_t ordered_store, int64_t current_pos, int64_t STATE){
 }
 
 
-int64_t states_GO_UP(int64_t ordered_store, int64_t current_pos, int64_t UP_2, int64_t CAB_2, int64_t UP_3, int64_t CAB_3, int64_t last_pos, int64_t *motor_direction, int64_t STATE){
+int64_t states_GO_UP(int64_t ordered_store, int64_t current_pos, int64_t *orders, int64_t last_pos, int64_t *motor_direction, int64_t STATE){
+    int64_t UP_2 = *(orders + 2);
+    int64_t CAB_2 = *(orders + 4);
+    int64_t UP_3 = *(orders + 5);
+    int64_t CAB_3 = *(orders + 7);
+    
     printf("State = GO_UP \n");
     elevio_floorIndicator(states_get_floor_to_indicate(last_pos));
     if(ordered_store == current_pos){
         elevio_motorDirection(DIRN_STOP);
         *motor_direction = DIRN_STOP;
         elevio_floorIndicator(states_get_floor_to_indicate(current_pos));
-        STATE = 4;
+        STATE = OPEN_DOOR;
     }
     else if((current_pos == 10 || current_pos == 20 || current_pos == 30 || current_pos == 40)){
         if(current_pos == 20 && (UP_2 != 0 || CAB_2 != 0)){
             elevio_motorDirection(DIRN_STOP);
             *motor_direction = DIRN_STOP;
             elevio_floorIndicator(states_get_floor_to_indicate(current_pos));
-            STATE = 4;
+            STATE = OPEN_DOOR;
         }
         else if(current_pos == 30 && (UP_3 != 0 || CAB_3 != 0)){
             elevio_motorDirection(DIRN_STOP);
@@ -81,7 +86,12 @@ int64_t states_GO_UP(int64_t ordered_store, int64_t current_pos, int64_t UP_2, i
 }
 
 
-int64_t states_GO_DOWN(int64_t ordered_store, int64_t current_pos, int64_t DOWN_2, int64_t CAB_2, int64_t DOWN_3, int64_t CAB_3, int64_t last_pos, int64_t *motor_direction, int64_t STATE){
+int64_t states_GO_DOWN(int64_t ordered_store, int64_t current_pos, int64_t *orders, int64_t last_pos, int64_t *motor_direction, int64_t STATE){
+    // orders[3], orders[4], orders[6], orders[7]
+    int64_t DOWN_2 = *(orders + 3);
+    int64_t CAB_2 = *(orders + 4);
+    int64_t DOWN_3 = *(orders + 6);
+    int64_t CAB_3 = *(orders + 6);
     printf("State = GO_DOWN \n");
     elevio_floorIndicator(states_get_floor_to_indicate(last_pos));
     if(ordered_store == current_pos){
