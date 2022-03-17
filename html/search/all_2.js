@@ -1,14 +1,9 @@
 var searchData=
 [
-  ['states_2eh_7',['states.h',['../states_8h.html',1,'']]],
-  ['states_5fclose_5fdoor_8',['states_CLOSE_DOOR',['../states_8h.html#a424f8cd4a8b30b038b1721ae97337d2f',1,'states.c']]],
-  ['states_5fgo_5fdown_9',['states_GO_DOWN',['../states_8h.html#ac81754b28cbb26200c586fc35b5599f6',1,'states.c']]],
-  ['states_5fgo_5fup_10',['states_GO_UP',['../states_8h.html#a32f61820a03cb92a080505e2e443622c',1,'states.c']]],
-  ['states_5fidle_11',['states_IDLE',['../states_8h.html#ae95fe83c753526882d850728aa3fe6cf',1,'states.c']]],
-  ['states_5finit_5fstate_12',['states_INIT_STATE',['../states_8h.html#a77e7a942f74c3a81bd9f7722c6f811f4',1,'states.c']]],
-  ['states_5fopen_5fdoor_13',['states_OPEN_DOOR',['../states_8h.html#ad99f71657629136b4ba4fa6b6c4f6f2a',1,'states.c']]],
-  ['states_5fopen_5fdoor_5fstop_14',['states_OPEN_DOOR_STOP',['../states_8h.html#aae25682ba1ab8593559be6dc81cd572d',1,'states.c']]],
-  ['states_5fstop_15',['states_STOP',['../states_8h.html#aec2dacaf6ab4fd0fc45c1ff058ee8eef',1,'states.c']]],
-  ['states_5fwait_16',['states_WAIT',['../states_8h.html#af36d88a188a6304b4f415c5d6feb5786',1,'states.c']]],
-  ['states_5fwait_5fstop_17',['states_WAIT_STOP',['../states_8h.html#ab4137e7af3d02aa75be98f2fa534366e',1,'states.c']]]
+  ['pos_5fand_5fdir_2eh_5',['pos_and_dir.h',['../pos__and__dir_8h.html',1,'']]],
+  ['pos_5fand_5fdir_5fget_5fcurrent_5fpos_6',['pos_and_dir_get_current_pos',['../pos__and__dir_8h.html#aaa23ac49e06b62dba4fcd516f07072e3',1,'pos_and_dir.c']]],
+  ['pos_5fand_5fdir_5fget_5ffloor_5fsensor_7',['pos_and_dir_get_floor_sensor',['../pos__and__dir_8h.html#af61bbee9e955fca1788d15ea7f897c4c',1,'pos_and_dir.c']]],
+  ['pos_5fand_5fdir_5fget_5flast_5fmotor_5fdirection_8',['pos_and_dir_get_last_motor_direction',['../pos__and__dir_8h.html#a325ba98fb20aff7e0dc211a365f49a22',1,'pos_and_dir.c']]],
+  ['pos_5fand_5fdir_5fget_5flast_5fpos_9',['pos_and_dir_get_last_pos',['../pos__and__dir_8h.html#a666b1e1d38059f4f4c2ca8090c81f679',1,'pos_and_dir.c']]],
+  ['pos_5fand_5fdir_5fget_5fneed_5ffor_5finitializing_10',['pos_and_dir_get_need_for_initializing',['../pos__and__dir_8h.html#a8227bcde7d226c1c7b7929df86ffe261',1,'pos_and_dir.c']]]
 ];

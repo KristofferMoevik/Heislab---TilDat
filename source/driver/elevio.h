@@ -1,5 +1,10 @@
 #pragma once  
 
+/**
+* @file
+* @brief A library for getting position, direction and need for initializing
+*/
+
 
 #define N_FLOORS 4
 
@@ -19,8 +24,20 @@ typedef enum {
 } ButtonType;
 
 
+/**
+* @brief Start the elevator
+*
+* @return void
+*/
 void elevio_init(void);
 
+/**
+* @brief Set the motor direction of the elevator
+*
+* @param[in] dirn specifies if the elevator should go up, down or stay still. down = -1, still = 0, up = 1.
+*
+* @return void
+*/
 void elevio_motorDirection(MotorDirection dirn);
 void elevio_buttonLamp(int floor, ButtonType button, int value);
 void elevio_floorIndicator(int floor);

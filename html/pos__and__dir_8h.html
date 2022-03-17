@@ -90,7 +90,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="center"><img src="pos__and__dir_8h__dep__incl.png" border="0" usemap="#asource_2pos__and__dir_8hdep" alt=""/></div>
 <map name="asource_2pos__and__dir_8hdep" id="asource_2pos__and__dir_8hdep">
 <area shape="rect" title="A library for getting position, direction and need for initializing." alt="" coords="63,5,221,32"/>
-<area shape="rect" href="main_8c_source.html" title=" " alt="" coords="5,80,119,107"/>
+<area shape="rect" href="main_8c.html" title="A program for running the elevator at the elevator lab." alt="" coords="5,80,119,107"/>
 <area shape="rect" href="pos__and__dir_8c_source.html" title=" " alt="" coords="143,80,301,107"/>
 </map>
 </div>
@@ -111,6 +111,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a8227bcde7d226c1c7b7929df86ffe261"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pos__and__dir_8h.html#a8227bcde7d226c1c7b7929df86ffe261">pos_and_dir_get_need_for_initializing</a> (int64_t floor_sensor, int64_t last_pos, int64_t motor_direction, int64_t last_motor_direction, int64_t STATE)</td></tr>
 <tr class="memdesc:a8227bcde7d226c1c7b7929df86ffe261"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current floor of the elevator.  <a href="pos__and__dir_8h.html#a8227bcde7d226c1c7b7929df86ffe261">More...</a><br /></td></tr>
 <tr class="separator:a8227bcde7d226c1c7b7929df86ffe261"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af61bbee9e955fca1788d15ea7f897c4c"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pos__and__dir_8h.html#af61bbee9e955fca1788d15ea7f897c4c">pos_and_dir_get_floor_sensor</a> ()</td></tr>
+<tr class="memdesc:af61bbee9e955fca1788d15ea7f897c4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current floor of the elevator.  <a href="pos__and__dir_8h.html#af61bbee9e955fca1788d15ea7f897c4c">More...</a><br /></td></tr>
+<tr class="separator:af61bbee9e955fca1788d15ea7f897c4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A library for getting position, direction and need for initializing. </p>
@@ -174,7 +177,29 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>current_pos</code> value of the position of the elevator. Has values [10, 15, 20, 25, 30, 35, 40] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pos__and__dir_8c_source.html#l00011">11</a> of file <a class="el" href="pos__and__dir_8c_source.html">pos_and_dir.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pos__and__dir_8c_source.html#l00012">12</a> of file <a class="el" href="pos__and__dir_8c_source.html">pos_and_dir.c</a>.</p>
+
+</div>
+</div>
+<a id="af61bbee9e955fca1788d15ea7f897c4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af61bbee9e955fca1788d15ea7f897c4c">&#9670;&nbsp;</a></span>pos_and_dir_get_floor_sensor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int64_t pos_and_dir_get_floor_sensor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the current floor of the elevator. </p>
+<dl class="section return"><dt>Returns</dt><dd>the position of the elevator based on sensor data. returns value 10, 20, 30 or 40 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="pos__and__dir_8c_source.html#l00059">59</a> of file <a class="el" href="pos__and__dir_8c_source.html">pos_and_dir.c</a>.</p>
 
 </div>
 </div>
@@ -214,7 +239,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>last_motor_direction</code> value of the ordered store. Has values [-1, 1] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pos__and__dir_8c_source.html#l00043">43</a> of file <a class="el" href="pos__and__dir_8c_source.html">pos_and_dir.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pos__and__dir_8c_source.html#l00044">44</a> of file <a class="el" href="pos__and__dir_8c_source.html">pos_and_dir.c</a>.</p>
 
 </div>
 </div>
@@ -254,7 +279,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>last_pos</code> value of the last known position based on the sensors. Has values [10, 20, 30, 40] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pos__and__dir_8c_source.html#l00036">36</a> of file <a class="el" href="pos__and__dir_8c_source.html">pos_and_dir.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pos__and__dir_8c_source.html#l00037">37</a> of file <a class="el" href="pos__and__dir_8c_source.html">pos_and_dir.c</a>.</p>
 
 </div>
 </div>
@@ -315,7 +340,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>STATE</code> the state of the finite state machine of the elevator. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pos__and__dir_8c_source.html#l00050">50</a> of file <a class="el" href="pos__and__dir_8c_source.html">pos_and_dir.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pos__and__dir_8c_source.html#l00051">51</a> of file <a class="el" href="pos__and__dir_8c_source.html">pos_and_dir.c</a>.</p>
 
 </div>
 </div>

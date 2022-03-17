@@ -13,7 +13,8 @@ Include dependency graph for pos\+\_\+and\+\_\+dir.\+h\+:\nopagebreak
 \includegraphics[width=199pt]{pos__and__dir_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -30,6 +31,8 @@ int64\+\_\+t \mbox{\hyperlink{pos__and__dir_8h_a666b1e1d38059f4f4c2ca8090c81f679
 int64\+\_\+t \mbox{\hyperlink{pos__and__dir_8h_a325ba98fb20aff7e0dc211a365f49a22}{pos\+\_\+and\+\_\+dir\+\_\+get\+\_\+last\+\_\+motor\+\_\+direction}} (int64\+\_\+t motor\+\_\+direction, int64\+\_\+t last\+\_\+motor\+\_\+direction)
 \begin{DoxyCompactList}\small\item\em Get the last motor direction. \end{DoxyCompactList}\item 
 int64\+\_\+t \mbox{\hyperlink{pos__and__dir_8h_a8227bcde7d226c1c7b7929df86ffe261}{pos\+\_\+and\+\_\+dir\+\_\+get\+\_\+need\+\_\+for\+\_\+initializing}} (int64\+\_\+t floor\+\_\+sensor, int64\+\_\+t last\+\_\+pos, int64\+\_\+t motor\+\_\+direction, int64\+\_\+t last\+\_\+motor\+\_\+direction, int64\+\_\+t STATE)
+\begin{DoxyCompactList}\small\item\em Get the current floor of the elevator. \end{DoxyCompactList}\item 
+int64\+\_\+t \mbox{\hyperlink{pos__and__dir_8h_af61bbee9e955fca1788d15ea7f897c4c}{pos\+\_\+and\+\_\+dir\+\_\+get\+\_\+floor\+\_\+sensor}} ()
 \begin{DoxyCompactList}\small\item\em Get the current floor of the elevator. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -67,7 +70,24 @@ Get the current floor of the elevator.
 \end{DoxyReturn}
 
 
-Definition at line 11 of file pos\+\_\+and\+\_\+dir.\+c.
+Definition at line 12 of file pos\+\_\+and\+\_\+dir.\+c.
+
+\mbox{\Hypertarget{pos__and__dir_8h_af61bbee9e955fca1788d15ea7f897c4c}\label{pos__and__dir_8h_af61bbee9e955fca1788d15ea7f897c4c}} 
+\index{pos\_and\_dir.h@{pos\_and\_dir.h}!pos\_and\_dir\_get\_floor\_sensor@{pos\_and\_dir\_get\_floor\_sensor}}
+\index{pos\_and\_dir\_get\_floor\_sensor@{pos\_and\_dir\_get\_floor\_sensor}!pos\_and\_dir.h@{pos\_and\_dir.h}}
+\doxysubsubsection{\texorpdfstring{pos\_and\_dir\_get\_floor\_sensor()}{pos\_and\_dir\_get\_floor\_sensor()}}
+{\footnotesize\ttfamily int64\+\_\+t pos\+\_\+and\+\_\+dir\+\_\+get\+\_\+floor\+\_\+sensor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the current floor of the elevator. 
+
+\begin{DoxyReturn}{Returns}
+the position of the elevator based on sensor data. returns value 10, 20, 30 or 40 
+\end{DoxyReturn}
+
+
+Definition at line 59 of file pos\+\_\+and\+\_\+dir.\+c.
 
 \mbox{\Hypertarget{pos__and__dir_8h_a325ba98fb20aff7e0dc211a365f49a22}\label{pos__and__dir_8h_a325ba98fb20aff7e0dc211a365f49a22}} 
 \index{pos\_and\_dir.h@{pos\_and\_dir.h}!pos\_and\_dir\_get\_last\_motor\_direction@{pos\_and\_dir\_get\_last\_motor\_direction}}
@@ -91,7 +111,7 @@ Get the last motor direction.
 \end{DoxyReturn}
 
 
-Definition at line 43 of file pos\+\_\+and\+\_\+dir.\+c.
+Definition at line 44 of file pos\+\_\+and\+\_\+dir.\+c.
 
 \mbox{\Hypertarget{pos__and__dir_8h_a666b1e1d38059f4f4c2ca8090c81f679}\label{pos__and__dir_8h_a666b1e1d38059f4f4c2ca8090c81f679}} 
 \index{pos\_and\_dir.h@{pos\_and\_dir.h}!pos\_and\_dir\_get\_last\_pos@{pos\_and\_dir\_get\_last\_pos}}
@@ -115,7 +135,7 @@ Get the last known position of the elevator.
 \end{DoxyReturn}
 
 
-Definition at line 36 of file pos\+\_\+and\+\_\+dir.\+c.
+Definition at line 37 of file pos\+\_\+and\+\_\+dir.\+c.
 
 \mbox{\Hypertarget{pos__and__dir_8h_a8227bcde7d226c1c7b7929df86ffe261}\label{pos__and__dir_8h_a8227bcde7d226c1c7b7929df86ffe261}} 
 \index{pos\_and\_dir.h@{pos\_and\_dir.h}!pos\_and\_dir\_get\_need\_for\_initializing@{pos\_and\_dir\_get\_need\_for\_initializing}}
@@ -145,5 +165,5 @@ Get the current floor of the elevator.
 \end{DoxyReturn}
 
 
-Definition at line 50 of file pos\+\_\+and\+\_\+dir.\+c.
+Definition at line 51 of file pos\+\_\+and\+\_\+dir.\+c.
 

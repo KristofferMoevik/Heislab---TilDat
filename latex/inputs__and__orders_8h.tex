@@ -1,0 +1,115 @@
+\hypertarget{inputs__and__orders_8h}{}\doxysection{source/inputs\+\_\+and\+\_\+orders.h File Reference}
+\label{inputs__and__orders_8h}\index{source/inputs\_and\_orders.h@{source/inputs\_and\_orders.h}}
+
+
+A simple library for prioritizing which floor to go first.  
+
+
+{\ttfamily \#include $<$inttypes.\+h$>$}\newline
+Include dependency graph for inputs\+\_\+and\+\_\+orders.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=230pt]{inputs__and__orders_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{inputs__and__orders_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{inputs__and__orders_8h_af3d2d103b6636bfe571fabd713895607}{inputs\+\_\+and\+\_\+orders\+\_\+get\+\_\+target\+\_\+floor}} (int64\+\_\+t orders\mbox{[}$\,$\mbox{]}, int64\+\_\+t ordered\+\_\+store)
+\begin{DoxyCompactList}\small\item\em Get all the orders and return the floor to go to based on when the order was placed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{inputs__and__orders_8h_aaadfe5fa64937b68d64edcf64f497d7e}{inputs\+\_\+and\+\_\+orders\+\_\+update\+\_\+inputs}} (int64\+\_\+t $\ast$inputs, int64\+\_\+t $\ast$obstruction, int64\+\_\+t $\ast$stop)
+\begin{DoxyCompactList}\small\item\em Get all the inputs from the elevator. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{inputs__and__orders_8h_af629f98bcc4b376a6009dd30dea6889e}{inputs\+\_\+and\+\_\+orders\+\_\+update\+\_\+orders}} (int64\+\_\+t $\ast$inputs, int64\+\_\+t $\ast$orders)
+\begin{DoxyCompactList}\small\item\em Get all the orders from the elevator. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A simple library for prioritizing which floor to go first. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{inputs__and__orders_8h_af3d2d103b6636bfe571fabd713895607}\label{inputs__and__orders_8h_af3d2d103b6636bfe571fabd713895607}} 
+\index{inputs\_and\_orders.h@{inputs\_and\_orders.h}!inputs\_and\_orders\_get\_target\_floor@{inputs\_and\_orders\_get\_target\_floor}}
+\index{inputs\_and\_orders\_get\_target\_floor@{inputs\_and\_orders\_get\_target\_floor}!inputs\_and\_orders.h@{inputs\_and\_orders.h}}
+\doxysubsubsection{\texorpdfstring{inputs\_and\_orders\_get\_target\_floor()}{inputs\_and\_orders\_get\_target\_floor()}}
+{\footnotesize\ttfamily int inputs\+\_\+and\+\_\+orders\+\_\+get\+\_\+target\+\_\+floor (\begin{DoxyParamCaption}\item[{int64\+\_\+t}]{orders\mbox{[}$\,$\mbox{]},  }\item[{int64\+\_\+t}]{ordered\+\_\+store }\end{DoxyParamCaption})}
+
+
+
+Get all the orders and return the floor to go to based on when the order was placed. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em orders} & Array of orders with values of when the ordr was placed. Is a array of size 12 \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em ordered\+\_\+store} & value of the ordered store.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily ordered\+\_\+store}, is one of the values 0, 10, 20, 30, 40 
+\end{DoxyReturn}
+
+
+Definition at line 43 of file inputs\+\_\+and\+\_\+orders.\+c.
+
+\mbox{\Hypertarget{inputs__and__orders_8h_aaadfe5fa64937b68d64edcf64f497d7e}\label{inputs__and__orders_8h_aaadfe5fa64937b68d64edcf64f497d7e}} 
+\index{inputs\_and\_orders.h@{inputs\_and\_orders.h}!inputs\_and\_orders\_update\_inputs@{inputs\_and\_orders\_update\_inputs}}
+\index{inputs\_and\_orders\_update\_inputs@{inputs\_and\_orders\_update\_inputs}!inputs\_and\_orders.h@{inputs\_and\_orders.h}}
+\doxysubsubsection{\texorpdfstring{inputs\_and\_orders\_update\_inputs()}{inputs\_and\_orders\_update\_inputs()}}
+{\footnotesize\ttfamily void inputs\+\_\+and\+\_\+orders\+\_\+update\+\_\+inputs (\begin{DoxyParamCaption}\item[{int64\+\_\+t $\ast$}]{inputs,  }\item[{int64\+\_\+t $\ast$}]{obstruction,  }\item[{int64\+\_\+t $\ast$}]{stop }\end{DoxyParamCaption})}
+
+
+
+Get all the inputs from the elevator. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in,out}}  & {\em inputs} & Array of the inputs from the elevator. Is a array of size 12 \\
+\hline
+\mbox{\texttt{ out}}  & {\em obstruction} & tells if there are a obstruction hindering the doors from closing. If there is an obstruction obstruction = 1, else obstruction = 0 \\
+\hline
+\mbox{\texttt{ in}}  & {\em stop} & tells if the stop button is pushed. If pushed stop = 1, else stop = 0.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 76 of file inputs\+\_\+and\+\_\+orders.\+c.
+
+\mbox{\Hypertarget{inputs__and__orders_8h_af629f98bcc4b376a6009dd30dea6889e}\label{inputs__and__orders_8h_af629f98bcc4b376a6009dd30dea6889e}} 
+\index{inputs\_and\_orders.h@{inputs\_and\_orders.h}!inputs\_and\_orders\_update\_orders@{inputs\_and\_orders\_update\_orders}}
+\index{inputs\_and\_orders\_update\_orders@{inputs\_and\_orders\_update\_orders}!inputs\_and\_orders.h@{inputs\_and\_orders.h}}
+\doxysubsubsection{\texorpdfstring{inputs\_and\_orders\_update\_orders()}{inputs\_and\_orders\_update\_orders()}}
+{\footnotesize\ttfamily void inputs\+\_\+and\+\_\+orders\+\_\+update\+\_\+orders (\begin{DoxyParamCaption}\item[{int64\+\_\+t $\ast$}]{inputs,  }\item[{int64\+\_\+t $\ast$}]{orders }\end{DoxyParamCaption})}
+
+
+
+Get all the orders from the elevator. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em inputs} & Array of the inputs from the elevator. Is a array of size 12 \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em orders} & array of orders. The elements represent the buttons in the stores and the cab. The value of the elements are a time stamp.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 95 of file inputs\+\_\+and\+\_\+orders.\+c.
+
