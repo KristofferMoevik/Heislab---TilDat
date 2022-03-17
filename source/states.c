@@ -46,7 +46,8 @@ void states_start_elevator(){
     return;
 }
 
-
+// This is an internal function that makes sure the indicator lights is updated correctly
+// in the different states. 
 int64_t states_get_floor_to_indicate(int64_t last_floor){
     return (last_floor / 10) - 1;
 }
